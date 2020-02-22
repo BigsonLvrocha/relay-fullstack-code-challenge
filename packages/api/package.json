@@ -4,6 +4,10 @@
   "main": "index.js",
   "license": "MIT",
   "devDependencies": {
+    "nodemon": "^2.0.2",
     "typescript": "^3.7.5"
+  },
+  "scripts": {
+    "dev": "nodemon src/index.ts"
   }
 }
