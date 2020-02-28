@@ -4,23 +4,29 @@
   "main": "index.js",
   "license": "MIT",
   "devDependencies": {
+    "@types/bluebird": "^3.5.29",
     "@types/graphql-api-koa": "^2.0.2",
-    "@types/koa": "^2.11.1",
+    "@types/koa": "^2.11.2",
     "@types/koa-bodyparser": "^4.3.0",
     "@types/koa__router": "^8.0.2",
-    "@types/node": "^13.7.4",
+    "@types/node": "^13.7.6",
+    "@types/validator": "^12.0.1",
     "nodemon": "^2.0.2",
-    "typescript": "^3.7.5"
+    "sequelize-cli": "^5.5.1",
+    "typescript": "^3.8.2"
   },
   "scripts": {
     "dev": "nodemon src/index.ts"
   },
   "dependencies": {
     "@koa/router": "^8.0.8",
+    "dotenv": "^8.2.0",
     "graphql": "^14.6.0",
     "graphql-api-koa": "^4.1.1",
     "graphql-tools": "^4.0.7",
     "koa": "^2.11.0",
-    "koa-bodyparser": "^4.2.1"
+    "koa-bodyparser": "^4.2.1",
+    "pg": "^7.18.2",
+    "sequelize": "^5.21.5"
   }
 }
