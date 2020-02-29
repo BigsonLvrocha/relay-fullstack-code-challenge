@@ -1,8 +1,12 @@
-import { models } from '../db';
+import { ParameterizedContext } from 'koa';
 
-export function getContext() {
+import { models } from '../db';
+import { User } from '../db/models/User';
+
+export function getContext(ctx: ParameterizedContext) {
   return {
     models,
+    user: ctx.state.user as User | undefined,
   };
 }
 
