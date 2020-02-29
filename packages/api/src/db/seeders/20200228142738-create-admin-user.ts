@@ -8,7 +8,7 @@ export async function up(q: QueryInterface) {
       id: v4(),
       name: 'Distribuidora FastFeet',
       email: 'admin@fastfeet.com',
-      password_hash: hashSync('123456', 8),
+      password_hash: hashSync('123456', 10),
       created_at: new Date(),
       updated_at: new Date(),
     },
