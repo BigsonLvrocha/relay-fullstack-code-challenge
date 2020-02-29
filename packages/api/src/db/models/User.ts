@@ -1,6 +1,6 @@
 import { Model, Sequelize, DataTypes, BuildOptions } from 'sequelize';
 
-interface User extends Model {
+export interface User extends Model {
   readonly id: string;
   name: string;
   email: string;
@@ -9,7 +9,7 @@ interface User extends Model {
   updated_at: Date;
 }
 
-type UserStatic = typeof Model & {
+export type UserStatic = typeof Model & {
   new (values?: Partial<User>, options?: BuildOptions): User;
 };
 
@@ -39,7 +39,7 @@ export function build(sequelize: Sequelize) {
     },
     {
       timestamps: true,
-      createdAt: 'create_at',
+      createdAt: 'created_at',
       updatedAt: 'updated_at',
     },
   ) as UserStatic;
