@@ -56,5 +56,6 @@ module.exports = {
       }
     ],
     "camelcase": "off",
+    "no-underscore-dangle": "off"
   }
 };
