@@ -4,6 +4,7 @@ module.exports = {
     es6: true,
     node: true,
   },
+  ignorePatterns: ["temp.js", "node_modules", "generated"],
   extends: [
     'plugin:react/recommended',
     'airbnb',
