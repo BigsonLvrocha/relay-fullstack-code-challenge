@@ -2,3 +2,5 @@ node_modules
 dist
 .env
 packages/api/yarn-error.log
+data
+generated
