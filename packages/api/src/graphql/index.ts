@@ -1,16 +1,25 @@
 import { join } from 'path';
-import { readFileSync } from 'fs';
 
+import { fileLoader, mergeTypes, mergeResolvers } from 'merge-graphql-schemas';
 import { makeExecutableSchema } from 'graphql-tools';
 
-import { resolvers } from './resolver';
+function getResolvers() {
+  const resolversArray = fileLoader(
+    join(__dirname, 'modules/**/*.resolvers.*s'),
+  );
+  return mergeResolvers(resolversArray);
+}
+
+function getTypes() {
+  const typesArray = fileLoader(join(__dirname, 'modules/**/*.graphql'));
+  return mergeTypes(typesArray);
+}
 
 function createSchema() {
-  const schemaTxt = readFileSync(join(__dirname, 'schema.graphql'), {
-    encoding: 'utf-8',
-  });
+  const typeDefs = getTypes();
+  const resolvers = getResolvers();
   const executableSchema = makeExecutableSchema({
-    typeDefs: schemaTxt,
+    typeDefs,
     resolvers,
   });
   return executableSchema;
