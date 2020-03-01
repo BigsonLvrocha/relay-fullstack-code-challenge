@@ -3,7 +3,7 @@ import { promisify } from 'util';
 import { compare } from 'bcrypt';
 import { sign, Secret, SignOptions } from 'jsonwebtoken';
 
-import { IResolvers } from '../../generated/schema';
+import { GQLResolvers } from '../../generated/schema';
 
 const signAsync = promisify<
   string | Buffer | object,
@@ -12,7 +12,7 @@ const signAsync = promisify<
   string
 >(sign);
 
-const resolvers: IResolvers = {
+const resolvers: GQLResolvers = {
   Mutation: {
     login: async (_parent, args, ctx) => {
       const user = await ctx.models.User.findOne({
