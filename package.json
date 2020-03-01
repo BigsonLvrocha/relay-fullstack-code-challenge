@@ -9,6 +9,7 @@
   ],
   "private": true,
   "devDependencies": {
+    "@graphql-codegen/cli": "^1.12.2",
     "@typescript-eslint/eslint-plugin": "^2.21.0",
     "@typescript-eslint/parser": "^2.21.0",
     "eslint": "^6.8.0",
