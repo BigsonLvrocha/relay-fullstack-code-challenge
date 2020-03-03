@@ -10,6 +10,9 @@ const resolvers: GQLResolvers = {
       return id;
     },
   },
+  Query: {
+    me: (_parent, _args, ctx) => ctx.user!,
+  },
 };
 
 export default resolvers;
