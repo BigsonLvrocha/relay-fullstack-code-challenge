@@ -2,5 +2,5 @@
   "execMap": {
     "ts": "ts-node"
   },
-  "ext": "js,json,graphql"
+  "ext": "js,json,graphql,ts"
 }
