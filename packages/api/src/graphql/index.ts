@@ -2,6 +2,9 @@ import { join } from 'path';
 
 import { fileLoader, mergeTypes, mergeResolvers } from 'merge-graphql-schemas';
 import { makeExecutableSchema } from 'graphql-tools';
+import { applyMiddleware } from 'graphql-middleware';
+
+import { middlewares } from './middleware';
 
 function getResolvers() {
   const resolversArray = fileLoader(
@@ -22,7 +25,7 @@ function createSchema() {
     typeDefs,
     resolvers,
   });
-  return executableSchema;
+  return applyMiddleware(executableSchema, ...middlewares);
 }
 
 export const schema = createSchema();
