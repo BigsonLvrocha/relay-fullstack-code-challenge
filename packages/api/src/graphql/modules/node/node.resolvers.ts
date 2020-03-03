@@ -30,6 +30,9 @@ const resolvers: GQLResolvers = {
       };
     },
   },
+  node: {
+    __resolveType: ({ __typename }: any) => __typename,
+  },
 };
 
 export default resolvers;
