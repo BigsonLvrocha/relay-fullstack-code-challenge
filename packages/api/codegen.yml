@@ -19,6 +19,7 @@ generates:
         PositiveFloat: number
         PositiveInt: number
       typesPrefix: GQL
+      enumsAsTypes: true
       mappers:
         User: ../../db/models/User#User
   data/schema.graphql:
