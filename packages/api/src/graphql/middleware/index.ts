@@ -1,3 +1,4 @@
 import { shieldMiddleware } from './shield';
+import { validatorsMiddleware } from './validators';
 
-export const middlewares = [shieldMiddleware];
+export const middlewares = [validatorsMiddleware, shieldMiddleware];
