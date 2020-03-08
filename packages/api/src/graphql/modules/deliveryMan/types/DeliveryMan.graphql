@@ -1,0 +1,11 @@
+type DeliveryMan implements node {
+  id: ID!
+  _id: String!
+  name: String!
+  avatar_id: String
+  avatarId: ID
+  avatar: Avatar
+  email: String!
+  created_at: DateTime!
+  updated_at: DateTime
+}
