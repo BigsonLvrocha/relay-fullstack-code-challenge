@@ -13,11 +13,7 @@ export function getLoader(models: Models) {
       },
       raw: true,
     });
-    return users.sort((a, b) => {
-      return (
-        ids.findIndex(id => a.id === id) - ids.findIndex(id => b.id === id)
-      );
-    });
+    return ids.map(id => users.find(user => user.id === id) || null);
   });
   return userLoader;
 }
