@@ -1,4 +1,4 @@
-import { fromGlobalId, toGlobalId } from 'graphql-relay';
+import { toGlobalId } from 'graphql-relay';
 import { GQLResolvers } from '../../generated/schema';
 
 const resolvers: GQLResolvers = {
@@ -12,8 +12,7 @@ const resolvers: GQLResolvers = {
       };
     },
     async updateRecipient(_parent, args, ctx) {
-      const { values, clientMutationId, id: globalId } = args.input;
-      const { id } = fromGlobalId(globalId);
+      const { values, clientMutationId, id } = args.input;
       const recipient = await ctx.models.Recipient.findByPk(id);
       if (!recipient) {
         return {
