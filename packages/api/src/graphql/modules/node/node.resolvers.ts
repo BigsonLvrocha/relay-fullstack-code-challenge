@@ -2,7 +2,7 @@ import { fromGlobalId } from 'graphql-relay';
 
 import { GQLResolvers } from '../../generated/schema';
 import { GraphQLContext } from '../../context';
-import { Models, AnyModel } from '../../../db';
+import { Models } from '../../../db';
 
 function isSupportedType(
   type: string,
@@ -18,10 +18,8 @@ const resolvers: GQLResolvers = {
       if (!isSupportedType(type, ctx)) {
         return null;
       }
-      const model = ctx.models[type] as AnyModel;
-      const node = await model.findByPk(id, {
-        raw: true,
-      });
+      const loader = ctx.dataloaders[type];
+      const node = await loader.load(id);
       if (!node) {
         return null;
       }
