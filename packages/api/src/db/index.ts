@@ -3,6 +3,8 @@ import { Sequelize, Model, BuildOptions } from 'sequelize';
 import * as config from './config';
 import * as User from './models/User';
 import * as Recipient from './models/Recipient';
+import * as Avatar from './models/Avatar';
+import * as DeliveryMan from './models/DeliveryMan';
 
 function isNodeEnvValid(env?: string): env is keyof typeof config {
   return !!env && env in config;
@@ -19,10 +21,19 @@ const seqConfig = config[env];
 export const sequelize = new Sequelize(seqConfig);
 
 function buildModel(seq: Sequelize) {
-  return {
+  const models = {
     User: User.build(seq),
     Recipient: Recipient.build(seq),
+    Avatar: Avatar.build(seq),
+    DeliveryMan: DeliveryMan.build(seq),
   };
+  Object.keys(models).forEach(key => {
+    const modelKey = key as keyof typeof models;
+    if (models[modelKey].associate) {
+      models[modelKey].associate!(models);
+    }
+  });
+  return models;
 }
 
 export const models = buildModel(sequelize);
@@ -45,6 +56,15 @@ export type AvailableModelInstanceTypes = SequelizeInstanceType<
 
 export type SequelizeStaticType<TInstance> = typeof Model & {
   new (values?: Partial<TInstance>, options?: BuildOptions): TInstance;
+} & {
+  associate?: (
+    models: Record<
+      string,
+      typeof Model & {
+        new (values?: Partial<any>, options?: BuildOptions): any;
+      }
+    >,
+  ) => void;
 };
 
 export type AnyModel = SequelizeStaticType<AvailableModelInstanceTypes>;
