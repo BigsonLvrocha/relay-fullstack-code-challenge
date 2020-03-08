@@ -5,6 +5,7 @@ import { GQLBrState } from '../../graphql/generated/schema';
 
 export interface Recipient extends Model {
   readonly id: string;
+  name: string;
   street: string;
   number: number | undefined | null;
   complement: string | undefined | null;
@@ -25,6 +26,10 @@ export function build(sequelize: Sequelize) {
         type: DataTypes.UUID,
         primaryKey: true,
         defaultValue: DataTypes.UUIDV4,
+      },
+      name: {
+        type: DataTypes.STRING,
+        allowNull: false,
       },
       street: {
         type: DataTypes.STRING,
