@@ -1,4 +1,5 @@
-import { Model, Sequelize, DataTypes, BuildOptions } from 'sequelize';
+import { Model, Sequelize, DataTypes } from 'sequelize';
+import { SequelizeStaticType } from '..';
 
 export interface User extends Model {
   readonly id: string;
@@ -9,9 +10,7 @@ export interface User extends Model {
   updated_at: Date;
 }
 
-export type UserStatic = typeof Model & {
-  new (values?: Partial<User>, options?: BuildOptions): User;
-};
+export type UserStatic = SequelizeStaticType<User>;
 
 export function build(sequelize: Sequelize) {
   const User = sequelize.define(
