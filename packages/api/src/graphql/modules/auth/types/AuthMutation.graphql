@@ -4,7 +4,7 @@ type Mutation {
 
 input LoginInput {
   clientMutationId: String
-  email: String!
+  email: EmailAddress!
   password: String!
 }
 
