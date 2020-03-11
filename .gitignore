@@ -4,3 +4,4 @@ dist
 packages/api/yarn-error.log
 data
 generated
+tmp
