@@ -8,3 +8,4 @@ scalar NonPositiveFloat
 scalar NonPositiveInt
 scalar PositiveFloat
 scalar PositiveInt
+scalar Upload
