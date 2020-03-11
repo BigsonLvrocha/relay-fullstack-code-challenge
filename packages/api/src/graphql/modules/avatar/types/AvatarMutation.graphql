@@ -1,0 +1,14 @@
+type Mutation {
+  uploadAvatar(input: UploadAvatarInput!): UploadAvatarPayload
+}
+
+input UploadAvatarInput {
+  clientMutationId: String
+  avatar: Upload!
+}
+
+type UploadAvatarPayload {
+  clientMutationId: String
+  avatar: Avatar
+  Error: [String!]
+}
