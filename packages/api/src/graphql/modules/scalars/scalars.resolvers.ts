@@ -10,6 +10,7 @@ import {
   PositiveIntResolver,
   PositiveFloatResolver,
 } from 'graphql-scalars';
+import { GraphQLUpload } from 'graphql-upload';
 
 const resolvers = {
   DateTime: DateTimeResolver,
@@ -22,6 +23,7 @@ const resolvers = {
   NonPositiveInt: NonPositiveIntResolver,
   PositiveInt: PositiveIntResolver,
   PositiveFloat: PositiveFloatResolver,
+  Upload: GraphQLUpload,
 };
 
 export default resolvers;
