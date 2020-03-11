@@ -4,7 +4,7 @@ import { SequelizeStaticType } from '..';
 
 export interface Avatar extends Model {
   readonly id: string;
-  originalName: string;
+  original_name: string;
   path: string;
   created_at: Date;
   updated_at: Date;
@@ -21,7 +21,7 @@ export function build(sequelize: Sequelize) {
         primaryKey: true,
         defaultValue: DataTypes.UUIDV4,
       },
-      originalName: {
+      original_name: {
         type: DataTypes.STRING,
         allowNull: false,
       },
