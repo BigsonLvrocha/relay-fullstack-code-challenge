@@ -1,0 +1,26 @@
+type Query {
+  deliveryMans(
+    first: NonNegativeInt
+    last: NonNegativeInt
+    after: String
+    before: String
+  ): DeliveryManConnection
+}
+
+type DeliveryManConnection {
+  pageInfo: PageInfo!
+  edges: [DeliveryManEdge!]!
+  totalCount: NonNegativeInt!
+}
+
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  endCursor: String
+  startCursor: String
+}
+
+type DeliveryManEdge {
+  cursor: String!
+  node: DeliveryMan
+}
