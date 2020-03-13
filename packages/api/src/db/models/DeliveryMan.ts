@@ -33,7 +33,7 @@ export function build(sequelize: Sequelize) {
           model: 'avatars',
           key: 'id',
         },
-        onDelete: 'SET_NULL',
+        onDelete: 'SET NULL',
         onUpdate: 'CASCADE',
       },
       email: {
@@ -50,7 +50,7 @@ export function build(sequelize: Sequelize) {
   ) as DeliveryManStatic;
 
   DeliveryMan.associate = models => {
-    models.DeliveryMan.hasOne(models.Avatar, {
+    models.DeliveryMan.belongsTo(models.Avatar, {
       foreignKey: 'avatar_id',
       onUpdate: 'CASCADE',
       onDelete: 'SET_NULL',
