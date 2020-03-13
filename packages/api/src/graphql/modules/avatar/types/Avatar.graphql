@@ -5,4 +5,5 @@ type Avatar implements node {
   path: String!
   created_at: DateTime!
   updated_at: DateTime!
+  url: String!
 }
