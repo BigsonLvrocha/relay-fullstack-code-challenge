@@ -1,7 +1,7 @@
 import { QueryInterface, DataTypes } from 'sequelize';
 
 export async function up(q: QueryInterface) {
-  await q.createTable('delivery_man', {
+  await q.createTable('delivery_mans', {
     id: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
@@ -19,7 +19,7 @@ export async function up(q: QueryInterface) {
         model: 'avatars',
         key: 'id',
       },
-      onDelete: 'SET_NULL',
+      onDelete: 'SET NULL',
       onUpdate: 'CASCADE',
     },
     email: {
@@ -39,5 +39,5 @@ export async function up(q: QueryInterface) {
 }
 
 export async function down(q: QueryInterface) {
-  await q.dropTable('delivery_man');
+  await q.dropTable('delivery_mans');
 }
