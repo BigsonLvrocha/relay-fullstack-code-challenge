@@ -1,6 +1,8 @@
 import { toGlobalId } from 'graphql-relay';
 import { GQLResolvers } from '../../generated/schema';
 
+import { model2cursor, loadAll } from './deliveryMan.loader';
+
 const resolvers: GQLResolvers = {
   Mutation: {
     async createDeliveryMan(_parent, args, ctx) {
@@ -52,6 +54,15 @@ const resolvers: GQLResolvers = {
       avatar_id ? ctx.dataloaders.Avatar.load(avatar_id) : null,
     id: ({ id }) => toGlobalId('DeliveryMan', id),
     _id: ({ id }) => id,
+  },
+  DeliveryManEdge: {
+    cursor(parent) {
+      return model2cursor(parent);
+    },
+    node: (parent, _args, ctx) => ctx.dataloaders.DeliveryMan.load(parent.id),
+  },
+  Query: {
+    deliveryMans: (_parent, args, ctx) => loadAll(ctx, args),
   },
 };
 
