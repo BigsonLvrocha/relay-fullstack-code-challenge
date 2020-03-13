@@ -1,4 +1,10 @@
 {
     "typescript.tsdk": "node_modules/typescript/lib",
-    "eslint.enable": true
+    "eslint.enable": true,
+    "files.watcherExclude": {
+        "**/data/**": true,
+        "**/dist/**": true,
+        "**/generated/**": true,
+        "**/tmp/**": true
+    }
 }
