@@ -57,7 +57,9 @@ const createDeliveryMan: IMiddleware<
     return resolver(parent, result, ctx, info);
   } catch (error) {
     if (error instanceof ValidationError) {
-      return error;
+      return {
+        Error: error.errors,
+      };
     }
     throw error;
   }
@@ -120,7 +122,9 @@ const updateDeliveryMan: IMiddleware<
     return resolver(parent, result, ctx, info);
   } catch (error) {
     if (error instanceof ValidationError) {
-      return error;
+      return {
+        Error: error.errors,
+      };
     }
     throw error;
   }
@@ -153,7 +157,9 @@ const deleteDeliveryMan: IMiddleware<
     return resolver(parent, result, ctx, info);
   } catch (error) {
     if (error instanceof ValidationError) {
-      return error;
+      return {
+        Error: error.errors,
+      };
     }
     throw error;
   }
