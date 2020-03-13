@@ -18,5 +18,6 @@ function getRuleTree() {
 
 export const shieldMiddleware = shield(getRuleTree(), {
   fallbackRule: isAdmin,
-  fallbackError: createError(401, 'Not Authorised!'),
+  fallbackError: createError(500, 'Internal server error!'),
+  debug: process.env.NODE_ENV !== 'production',
 });
