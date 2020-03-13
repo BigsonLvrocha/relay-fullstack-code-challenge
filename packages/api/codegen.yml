@@ -25,6 +25,7 @@ generates:
         User: ../../db/models/User#User
         Recipient: ../../db/models/Recipient#Recipient
         Avatar: ../../db/models/Avatar#Avatar
+        DeliveryMan: ../../db/models/DeliveryMan#DeliveryMan
   data/schema.graphql:
     plugins:
       - schema-ast
