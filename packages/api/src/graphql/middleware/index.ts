@@ -3,7 +3,7 @@ import { validatorsMiddleware } from './validators';
 import { mutationMiddleware } from './mutation';
 
 export const middlewares = [
-  validatorsMiddleware,
   shieldMiddleware,
+  validatorsMiddleware,
   mutationMiddleware,
 ];
