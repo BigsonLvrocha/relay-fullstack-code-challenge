@@ -46,6 +46,9 @@ const resolvers: GQLResolvers = {
     id({ id }) {
       return toGlobalId('Avatar', id);
     },
+    url({ path }) {
+      return `http://localhost:8000/uploads/${path}`;
+    },
   },
 };
 
