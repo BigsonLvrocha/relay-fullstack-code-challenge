@@ -1,0 +1,76 @@
+type Mutation {
+  createDelivery(input: CreateDeliveryInput!): CreateDeliveryPayload!
+  updateDelivery(input: UpdateDeliveryInput!): UpdateDeliveryPayload!
+  deleteDelivery(input: DeleteDeliveryInput!): DeleteDeliveryPayload!
+  pickupDelivery(input: PickupDeliveryInput!): PickupDeliveryPayload!
+  closeDelivery(input: CloseDeliveryInput!): CloseDeliveryPayload!
+}
+
+input CreateDeliveryInput {
+  clientMutationId: String
+  recipientId: ID!
+  deliveryManId: ID!
+  product: String!
+}
+
+type CreateDeliveryPayload {
+  clientMutationId: String
+  edge: DeliveryEdge
+  Error: [String!]
+}
+
+input UpdateDeliveryInput {
+  clientMutationId: String
+  deliveryId: ID!
+  recipientId: ID
+  deliveryManId: ID
+  signatureId: ID
+  product: String
+  canceled_at: DateTime
+  start_date: DateTime
+  end_date: DateTime
+}
+
+type UpdateDeliveryPayload {
+  clientMutationId: String
+  delivery: Delivery
+  Error: [String!]
+}
+
+input DeleteDeliveryInput {
+  clientMutationId: String
+  deliveryId: ID!
+}
+
+type DeleteDeliveryPayload {
+  clientMutationId: String
+  deletedDeliveryManId: ID
+  Error: [String!]
+}
+
+input PickupDeliveryInput {
+  clientMutationId: String
+  deliveryId: ID!
+  deliveryManId: ID!
+  start_date: DateTime!
+}
+
+type PickupDeliveryPayload {
+  clientMutationId: String
+  delivery: Delivery
+  Error: [String!]
+}
+
+input CloseDeliveryInput {
+  clientMutationId: String
+  deliveryId: ID!
+  deliveryManId: ID!
+  end_date: DateTime!
+  signature: Upload!
+}
+
+type CloseDeliveryPayload {
+  clientMutationId: String
+  delivery: Delivery
+  Error: [String!]
+}
