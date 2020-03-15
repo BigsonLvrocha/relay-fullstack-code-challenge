@@ -181,9 +181,6 @@ const deliveryMans: IMiddleware<
         if (!this.isType(val)) {
           return val;
         }
-        if (anyNonNil(val)) {
-          return val;
-        }
         const { type, id } = fromGlobalId(val);
         return type === 'DeliveryManEdgeCursor'
           ? id
@@ -191,9 +188,6 @@ const deliveryMans: IMiddleware<
       }),
       before: string().transform(function transformGlobalCursor(val) {
         if (!this.isType(val)) {
-          return val;
-        }
-        if (anyNonNil(val)) {
           return val;
         }
         const { type, id } = fromGlobalId(val);
