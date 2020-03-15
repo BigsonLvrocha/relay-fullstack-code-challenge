@@ -8,7 +8,7 @@ const resolvers: GQLResolvers = {
     async createDeliveryMan(_parent, args, ctx) {
       const { values } = args.input;
       const deliveryMan = await ctx.models.DeliveryMan.create({
-        name: values.email,
+        name: values.name,
         email: values.email,
         avatar_id: values.avatarId,
       });
