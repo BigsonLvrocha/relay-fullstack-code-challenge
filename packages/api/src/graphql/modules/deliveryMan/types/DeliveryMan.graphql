@@ -7,5 +7,12 @@ type DeliveryMan implements node {
   avatar: Avatar
   email: String!
   created_at: DateTime!
-  updated_at: DateTime
+  updated_at: DateTime!
+  deliveries(
+    first: NonNegativeInt
+    last: NonNegativeInt
+    after: String
+    before: String
+    filter: DeliveriesFilter
+  ): DeliveryConnection
 }
