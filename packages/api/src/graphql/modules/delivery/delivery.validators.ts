@@ -91,24 +91,54 @@ const deliveries: IMiddleware<
     const schema = object({
       first: number().positive(),
       last: number().positive(),
-      after: string().transform(function transformGlobalCursor(val) {
-        if (!this.isType(val)) {
-          return val;
-        }
-        const { type, id } = fromGlobalId(val);
-        return type === 'DeliveryEdgeCursor'
-          ? id
-          : { invalidCursorType: type, expected: 'DeliveryEdgeCursor' };
-      }),
-      before: string().transform(function transformGlobalCursor(val) {
-        if (!this.isType(val)) {
-          return val;
-        }
-        const { type, id } = fromGlobalId(val);
-        return type === 'DeliveryEdgeCursor'
-          ? id
-          : { invalidCursorType: type, expected: 'DeliveryEdgeCursor' };
-      }),
+      after: string()
+        .transform(function transformGlobalCursor(val) {
+          if (!this.isType(val)) {
+            return val;
+          }
+          const { type, id } = fromGlobalId(val);
+          return type === 'DeliveryEdgeCursor'
+            ? id
+            : { invalidCursorType: type, expected: 'DeliveryEdgeCursor' };
+        })
+        .test(
+          'valid delivery edge cursor',
+          'invalid cursor',
+          function isValidDeliveryEdgeCursor(val) {
+            if (!val) {
+              return true;
+            }
+            const [createdAtStr, id] = val.split(':');
+            const createdAtInt = Number.parseInt(createdAtStr, 10);
+            return (
+              anyNonNil(id) && !Number.isNaN(createdAtStr) && createdAtInt > 0
+            );
+          },
+        ),
+      before: string()
+        .transform(function transformGlobalCursor(val) {
+          if (!this.isType(val)) {
+            return val;
+          }
+          const { type, id } = fromGlobalId(val);
+          return type === 'DeliveryEdgeCursor'
+            ? id
+            : { invalidCursorType: type, expected: 'DeliveryEdgeCursor' };
+        })
+        .test(
+          'valid delivery edge cursor',
+          'invalid cursor',
+          function isValidDeliveryEdgeCursor(val) {
+            if (!val) {
+              return true;
+            }
+            const [createdAtStr, id] = val.split(':');
+            const createdAtInt = Number.parseInt(createdAtStr, 10);
+            return (
+              anyNonNil(id) && !Number.isNaN(createdAtStr) && createdAtInt > 0
+            );
+          },
+        ),
       filter: object({
         canceled: boolean().default(false),
         delivered: boolean().default(false),
