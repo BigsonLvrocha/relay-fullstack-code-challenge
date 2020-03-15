@@ -3,7 +3,7 @@ import { GQLResolvers } from '../../generated/schema';
 import { idResolver } from '../helper/relayResolver';
 import { Delivery } from '../../../db/models/Delivery';
 
-import { model2cursor } from './delivery.loader';
+import { model2cursor, loadAll } from './delivery.loader';
 
 const resolvers: GQLResolvers = {
   Delivery: {
@@ -39,6 +39,17 @@ const resolvers: GQLResolvers = {
         },
       };
     },
+  },
+  Query: {
+    deliveries: (_parent, args, ctx) =>
+      loadAll(ctx, {
+        ...args,
+        filter: {
+          ...args.filter!,
+          canceled: args.filter!.canceled!,
+          delivered: args.filter!.delivered!,
+        }!,
+      }),
   },
 };
 
