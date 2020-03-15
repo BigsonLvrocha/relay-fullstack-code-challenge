@@ -1,0 +1,19 @@
+type Delivery implements node {
+  id: ID!
+  _id: String!
+  recipient_id: String!
+  recipientId: ID!
+  recipient: Recipient!
+  delivery_man_id: String!
+  deliveryManId: ID!
+  deliveryMan: DeliveryMan!
+  signature_id: String
+  signatureId: ID
+  signature: Avatar
+  product: String!
+  canceled_at: DateTime
+  start_date: DateTime
+  end_date: DateTime
+  created_at: DateTime!
+  updated_at: DateTime!
+}
