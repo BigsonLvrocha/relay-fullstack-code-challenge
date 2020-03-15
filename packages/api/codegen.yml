@@ -27,6 +27,7 @@ generates:
         Avatar: ../../db/models/Avatar#Avatar
         DeliveryMan: ../../db/models/DeliveryMan#DeliveryMan
         DeliveryManEdge: ../../db/models/DeliveryMan#DeliveryMan
+        Delivery: ../../db/models/Delivery#Delivery
   data/schema.graphql:
     plugins:
       - schema-ast
