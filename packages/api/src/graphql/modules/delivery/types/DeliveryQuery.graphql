@@ -11,7 +11,7 @@ type Query {
 type DeliveryConnection {
   pageInfo: PageInfo
   totalCount: NonNegativeInt
-  edges: DeliveryEdge
+  edges: [DeliveryEdge]
 }
 
 type DeliveryEdge {
