@@ -1,0 +1,25 @@
+type Query {
+  deliveries(
+    first: NonNegativeInt
+    last:NonNegativeInt
+    after: String
+    before: String
+    filter: DeliveriesFilter
+  ): DeliveryConnection
+}
+
+type DeliveryConnection {
+  pageInfo: PageInfo
+  totalCount: NonNegativeInt
+  edges: DeliveryEdge
+}
+
+type DeliveryEdge {
+  cursor: String
+  node: Delivery
+}
+
+input DeliveriesFilter {
+  canceled: Boolean = false
+  delivered: Boolean = false
+}
