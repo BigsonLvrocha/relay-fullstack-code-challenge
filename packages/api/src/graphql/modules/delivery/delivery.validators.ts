@@ -1,9 +1,14 @@
-import { ValidationError, object, string } from 'yup';
+import { ValidationError, object, string, number, boolean } from 'yup';
 import { IMiddleware } from 'graphql-middleware';
 import { anyNonNil } from 'is-uuid';
 import { fromGlobalId } from 'graphql-relay';
 import { GraphQLContext } from '../../context';
-import { GQLMutationCreateDeliveryArgs } from '../../generated/schema';
+import {
+  GQLMutationCreateDeliveryArgs,
+  GQLQueryDeliveriesArgs,
+} from '../../generated/schema';
+
+import createError = require('http-errors');
 
 const createDelivery: IMiddleware<
   {},
@@ -77,9 +82,65 @@ const createDelivery: IMiddleware<
   }
 };
 
+const deliveries: IMiddleware<
+  {},
+  GraphQLContext,
+  GQLQueryDeliveriesArgs
+> = async (resolver, parent, args, ctx, info) => {
+  try {
+    const schema = object({
+      first: number().positive(),
+      last: number().positive(),
+      after: string().transform(function transformGlobalCursor(val) {
+        if (!this.isType(val)) {
+          return val;
+        }
+        const { type, id } = fromGlobalId(val);
+        return type === 'DeliveryEdgeCursor'
+          ? id
+          : { invalidCursorType: type, expected: 'DeliveryEdgeCursor' };
+      }),
+      before: string().transform(function transformGlobalCursor(val) {
+        if (!this.isType(val)) {
+          return val;
+        }
+        const { type, id } = fromGlobalId(val);
+        return type === 'DeliveryEdgeCursor'
+          ? id
+          : { invalidCursorType: type, expected: 'DeliveryEdgeCursor' };
+      }),
+      filter: object({
+        canceled: boolean().default(false),
+        delivered: boolean().default(false),
+      }),
+    }).test(
+      'valid connection args test',
+      'invalid connection args',
+      function testConnectionArgs(val) {
+        return !(
+          (val.first && val.last) ||
+          (val.first && val.before) ||
+          (val.last && val.after) ||
+          (val.after && val.before)
+        );
+      },
+    );
+    const result = await schema.validate(args);
+    return resolver(parent, result, ctx, info);
+  } catch (error) {
+    if (error instanceof ValidationError) {
+      return createError('400', error);
+    }
+    throw error;
+  }
+};
+
 const validators = {
   Mutation: {
     createDelivery,
+  },
+  Query: {
+    deliveries,
   },
 };
 
