@@ -1,5 +1,6 @@
 import { toGlobalId } from 'graphql-relay';
 import { GQLResolvers } from '../../generated/schema';
+import { loadAll as loadAllDeliveries } from '../delivery/delivery.loader';
 
 import { model2cursor, loadAll } from './deliveryMan.loader';
 
@@ -54,6 +55,15 @@ const resolvers: GQLResolvers = {
       avatar_id ? ctx.dataloaders.Avatar.load(avatar_id) : null,
     id: ({ id }) => toGlobalId('DeliveryMan', id),
     _id: ({ id }) => id,
+    deliveries: ({ id }, args, ctx) =>
+      loadAllDeliveries(ctx, {
+        ...args,
+        filter: {
+          canceled: args.filter!.canceled!,
+          delivered: args.filter!.delivered!,
+          delivery_man_id: id,
+        },
+      }),
   },
   DeliveryManEdge: {
     cursor(parent) {
