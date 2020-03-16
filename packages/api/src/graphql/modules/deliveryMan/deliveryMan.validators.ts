@@ -8,6 +8,7 @@ import {
   GQLMutationUpdateDeliveryManArgs,
   GQLMutationDeleteDeliveryManArgs,
   GQLQueryDeliveryMansArgs,
+  GQLQueryDeliveryManArgs,
 } from '../../generated/schema';
 import { GraphQLContext } from '../../context';
 import { deliveries } from '../delivery/delivery.validators';
@@ -218,6 +219,38 @@ const deliveryMans: IMiddleware<
   }
 };
 
+const deliveryMan: IMiddleware<
+  {},
+  GraphQLContext,
+  GQLQueryDeliveryManArgs
+> = async (resolver, parent, args, ctx, info) => {
+  try {
+    const schema = object({
+      id: string()
+        .required()
+        .transform(function transformDeliveryManId(val) {
+          if (!this.isType(val)) {
+            return val;
+          }
+          const { type, id } = fromGlobalId(val);
+          return type === 'DeliveryMan'
+            ? id
+            : {
+                invalidType: type,
+                expected: 'DeliveryMan',
+              };
+        }),
+    });
+    const result = await schema.validate(args);
+    return resolver(parent, result, ctx, info);
+  } catch (error) {
+    if (error instanceof ValidationError) {
+      return createError('400', error);
+    }
+    throw error;
+  }
+};
+
 const validators = {
   Mutation: {
     createDeliveryMan,
@@ -226,6 +259,7 @@ const validators = {
   },
   Query: {
     deliveryMans,
+    deliveryMan,
   },
   DeliveryMan: {
     deliveries,

@@ -8,4 +8,7 @@ export default {
   Recipient: allow,
   Avatar: allow,
   PageInfo: allow,
+  Query: {
+    deliveryMan: allow,
+  },
 };

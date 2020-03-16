@@ -73,6 +73,8 @@ const resolvers: GQLResolvers = {
   },
   Query: {
     deliveryMans: (_parent, args, ctx) => loadAll(ctx, args),
+    deliveryMan: (_parent, args, ctx) =>
+      ctx.dataloaders.DeliveryMan.load(args.id),
   },
 };
 
