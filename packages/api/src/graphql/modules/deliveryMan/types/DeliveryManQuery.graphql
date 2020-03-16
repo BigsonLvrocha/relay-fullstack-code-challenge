@@ -6,6 +6,7 @@ type Query {
     before: String
     filter: DeliveriesFilter
   ): DeliveryManConnection
+  deliveryMan(id: ID!): DeliveryMan!
 }
 
 type DeliveryManConnection {
