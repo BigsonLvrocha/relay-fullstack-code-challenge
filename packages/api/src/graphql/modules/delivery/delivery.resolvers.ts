@@ -1,4 +1,8 @@
 import { toGlobalId } from 'graphql-relay';
+import { resolve } from 'path';
+import { createWriteStream } from 'fs';
+import { v4 } from 'uuid';
+
 import { GQLResolvers } from '../../generated/schema';
 import { idResolver } from '../helper/relayResolver';
 import { Delivery } from '../../../db/models/Delivery';
@@ -63,6 +67,74 @@ const resolvers: GQLResolvers = {
       await delivery.destroy();
       return {
         deletedDeliveryId: toGlobalId('Delivery', deliveryId),
+      };
+    },
+    async pickupDelivery(_parent, args, ctx) {
+      const { start_date, deliveryId } = args.input;
+      const delivery = await ctx.models.Delivery.findByPk(deliveryId);
+      if (!delivery) {
+        return {
+          Error: ['Delivery not found'],
+        };
+      }
+      await delivery.update({
+        start_date,
+      });
+      return {
+        delivery,
+      };
+    },
+    async closeDelivery(_parent, args, ctx) {
+      const { end_date, deliveryId, signature } = args.input;
+      const delivery = await ctx.models.Delivery.findByPk(deliveryId);
+      if (!delivery) {
+        return {
+          Error: ['Delivery not found'],
+        };
+      }
+      const fileData = await signature;
+      const extension = fileData.filename.split('.').pop();
+      const filename = `${v4()}.${extension}`;
+      const path = resolve(
+        __dirname,
+        '..',
+        '..',
+        '..',
+        '..',
+        'tmp',
+        'uploads',
+        filename,
+      );
+      const streamIn = fileData.createReadStream();
+      const streamOut = createWriteStream(path);
+      await new Promise((res, rej) => {
+        streamIn
+          .pipe(streamOut)
+          .on('finish', res)
+          .on('error', rej);
+      });
+      await ctx.sequelize.transaction(async t => {
+        const avatar = await ctx.models.Avatar.create(
+          {
+            original_name: fileData.filename,
+            path: filename,
+          },
+          {
+            transaction: t,
+          },
+        );
+        await delivery.update(
+          {
+            signature_id: avatar.id,
+            end_date,
+          },
+          {
+            transaction: t,
+          },
+        );
+      });
+      return {
+        delivery,
       };
     },
   },
