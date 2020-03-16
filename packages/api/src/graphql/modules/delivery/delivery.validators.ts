@@ -1,4 +1,4 @@
-import { ValidationError, object, string, number, boolean } from 'yup';
+import { ValidationError, object, string, number, boolean, date } from 'yup';
 import { IMiddleware } from 'graphql-middleware';
 import { anyNonNil } from 'is-uuid';
 import { fromGlobalId } from 'graphql-relay';
@@ -6,6 +6,8 @@ import { GraphQLContext } from '../../context';
 import {
   GQLMutationCreateDeliveryArgs,
   GQLQueryDeliveriesArgs,
+  GQLMutationUpdateDeliveryArgs,
+  GQLMutationDeleteDeliveryArgs,
 } from '../../generated/schema';
 
 import createError = require('http-errors');
@@ -165,9 +167,114 @@ const deliveries: IMiddleware<
   }
 };
 
+const updateDelivery: IMiddleware<
+  {},
+  GraphQLContext,
+  GQLMutationUpdateDeliveryArgs
+> = async (resolver, parent, args, ctx, info) => {
+  try {
+    const schema = object({
+      input: object({
+        clientMutationId: string(),
+        deliveryId: string()
+          .required()
+          .transform(function transformDeliveryId(val) {
+            if (!this.isType(val)) {
+              return val;
+            }
+            const { type, id } = fromGlobalId(val);
+            return type === 'Delivery'
+              ? id
+              : { invalidType: type, expected: 'Delivery' };
+          }),
+        values: object({
+          recipient_id: string().transform(function transformRecipientId(val) {
+            if (!this.isType(val)) {
+              return val;
+            }
+            const { type, id } = fromGlobalId(val);
+            return type === 'Recipient'
+              ? id
+              : { invalidType: type, expected: 'Recipient' };
+          }),
+          delivery_man_id: string().transform(function transformDeliveryManId(
+            val,
+          ) {
+            if (!this.isType(val)) {
+              return val;
+            }
+            const { type, id } = fromGlobalId(val);
+            return type === 'DeliveryMan'
+              ? id
+              : { invalidType: type, expected: 'DeliveryMan' };
+          }),
+          signature_id: string().transform(function transformSignatureId(val) {
+            if (!this.isType(val)) {
+              return val;
+            }
+            const { type, id } = fromGlobalId(val);
+            return type === 'Avatar'
+              ? id
+              : { invalidType: type, expected: 'Avatar' };
+          }),
+          product: string(),
+          canceled_at: date(),
+          start_date: date(),
+          end_date: date(),
+        }),
+      }).required(),
+    });
+    const result = await schema.validate(args);
+    return resolver(parent, result, ctx, info);
+  } catch (error) {
+    if (error instanceof ValidationError) {
+      return {
+        Error: error.errors,
+      };
+    }
+    throw error;
+  }
+};
+
+const deleteDelivery: IMiddleware<
+  {},
+  GraphQLContext,
+  GQLMutationDeleteDeliveryArgs
+> = async (resolver, parent, args, ctx, info) => {
+  try {
+    const schema = object({
+      input: object({
+        clientMutationId: string(),
+        deliveryId: string()
+          .required()
+          .transform(function transformDeliveryId(val) {
+            if (!this.isType(val)) {
+              return val;
+            }
+            const { type, id } = fromGlobalId(val);
+            return type === 'Delivery'
+              ? id
+              : { invalidType: type, expected: 'Delivery' };
+          }),
+      }),
+    });
+    const result = await schema.validate(args);
+    return resolver(parent, result, ctx, info);
+  } catch (error) {
+    if (error instanceof ValidationError) {
+      return {
+        Error: error.errors,
+      };
+    }
+    throw error;
+  }
+};
+
 const validators = {
   Mutation: {
     createDelivery,
+    updateDelivery,
+    deleteDelivery,
   },
   Query: {
     deliveries,
