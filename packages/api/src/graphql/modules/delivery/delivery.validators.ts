@@ -2,6 +2,15 @@ import { ValidationError, object, string, number, boolean, date } from 'yup';
 import { IMiddleware } from 'graphql-middleware';
 import { anyNonNil } from 'is-uuid';
 import { fromGlobalId } from 'graphql-relay';
+import {
+  isAfter,
+  isBefore,
+  setHours,
+  setSeconds,
+  setMinutes,
+  setMilliseconds,
+} from 'date-fns';
+
 import { GraphQLContext } from '../../context';
 import {
   GQLMutationCreateDeliveryArgs,
@@ -219,7 +228,24 @@ const updateDelivery: IMiddleware<
           }),
           product: string(),
           canceled_at: date(),
-          start_date: date(),
+          start_date: date().test(
+            'valid time',
+            'must be between 8h00 and 18h00',
+            function testStartDate(val) {
+              if (!val) {
+                return true;
+              }
+              const start = setMilliseconds(
+                setSeconds(setMinutes(setHours(val, 8), 0), 0),
+                0,
+              );
+              const end = setMilliseconds(
+                setSeconds(setMinutes(setHours(val, 18), 0), 0),
+                0,
+              );
+              return isAfter(val, start) && isBefore(val, end);
+            },
+          ),
           end_date: date(),
         }),
       }).required(),
