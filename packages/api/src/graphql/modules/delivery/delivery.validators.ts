@@ -1,4 +1,13 @@
-import { ValidationError, object, string, number, boolean, date } from 'yup';
+import {
+  ValidationError,
+  string,
+  number,
+  boolean,
+  date,
+  mixed,
+  object,
+  MixedSchema,
+} from 'yup';
 import { IMiddleware } from 'graphql-middleware';
 import { anyNonNil } from 'is-uuid';
 import { fromGlobalId } from 'graphql-relay';
@@ -17,7 +26,10 @@ import {
   GQLQueryDeliveriesArgs,
   GQLMutationUpdateDeliveryArgs,
   GQLMutationDeleteDeliveryArgs,
+  GQLMutationPickupDeliveryArgs,
+  GQLMutationCloseDeliveryArgs,
 } from '../../generated/schema';
+import { FileUploadPromise } from '../scalars/scalarHelper';
 
 import createError = require('http-errors');
 
@@ -217,36 +229,40 @@ const updateDelivery: IMiddleware<
               ? id
               : { invalidType: type, expected: 'DeliveryMan' };
           }),
-          signature_id: string().transform(function transformSignatureId(val) {
-            if (!this.isType(val)) {
-              return val;
-            }
-            const { type, id } = fromGlobalId(val);
-            return type === 'Avatar'
-              ? id
-              : { invalidType: type, expected: 'Avatar' };
-          }),
-          product: string(),
-          canceled_at: date(),
-          start_date: date().test(
-            'valid time',
-            'must be between 8h00 and 18h00',
-            function testStartDate(val) {
-              if (!val) {
-                return true;
+          signature_id: string()
+            .transform(function transformSignatureId(val) {
+              if (!this.isType(val)) {
+                return val;
               }
-              const start = setMilliseconds(
-                setSeconds(setMinutes(setHours(val, 8), 0), 0),
-                0,
-              );
-              const end = setMilliseconds(
-                setSeconds(setMinutes(setHours(val, 18), 0), 0),
-                0,
-              );
-              return isAfter(val, start) && isBefore(val, end);
-            },
-          ),
-          end_date: date(),
+              const { type, id } = fromGlobalId(val);
+              return type === 'Avatar'
+                ? id
+                : { invalidType: type, expected: 'Avatar' };
+            })
+            .nullable(),
+          product: string(),
+          canceled_at: date().nullable(),
+          start_date: date()
+            .test(
+              'valid time',
+              'must be between 8h00 and 18h00',
+              function testStartDate(val) {
+                if (!val) {
+                  return true;
+                }
+                const start = setMilliseconds(
+                  setSeconds(setMinutes(setHours(val, 8), 0), 0),
+                  0,
+                );
+                const end = setMilliseconds(
+                  setSeconds(setMinutes(setHours(val, 18), 0), 0),
+                  0,
+                );
+                return isAfter(val, start) && isBefore(val, end);
+              },
+            )
+            .nullable(),
+          end_date: date().nullable(),
         }),
       }).required(),
     });
@@ -296,11 +312,151 @@ const deleteDelivery: IMiddleware<
   }
 };
 
+const pickupDelivery: IMiddleware<
+  {},
+  GraphQLContext,
+  GQLMutationPickupDeliveryArgs
+> = async (resolver, parent, args, ctx, info) => {
+  try {
+    const schema = object({
+      input: object({
+        clientMutationId: string(),
+        deliveryId: string()
+          .transform(function transformDeliveryId(val) {
+            if (!this.isType(val)) {
+              return val;
+            }
+            const { type, id } = fromGlobalId(val);
+            return type === 'Delivery'
+              ? id
+              : { invalidType: type, expected: 'Delivery' };
+          })
+          .required()
+          .test(
+            'valid delivery',
+            'must be a delivery for the delivery man',
+            async function testDeliveryManDelivery(val) {
+              const { deliveryManId } = this.parent;
+              const delivery = await ctx.models.Delivery.findOne({
+                where: {
+                  delivery_man_id: deliveryManId,
+                  id: val,
+                },
+              });
+              return !!delivery;
+            },
+          ),
+        deliveryManId: string()
+          .transform(function transformDeliveryId(val) {
+            if (!this.isType(val)) {
+              return val;
+            }
+            const { type, id } = fromGlobalId(val);
+            return type === 'DeliveryMan'
+              ? id
+              : { invalidType: type, expected: 'Delivery' };
+          })
+          .required(),
+        start_date: date().test(
+          'valid time',
+          'must be between 8h00 and 18h00',
+          function testStartDate(val) {
+            if (!val) {
+              return true;
+            }
+            const start = setMilliseconds(
+              setSeconds(setMinutes(setHours(val, 8), 0), 0),
+              0,
+            );
+            const end = setMilliseconds(
+              setSeconds(setMinutes(setHours(val, 18), 0), 0),
+              0,
+            );
+            return isAfter(val, start) && isBefore(val, end);
+          },
+        ),
+      }).required(),
+    });
+    const result = await schema.validate(args);
+    return resolver(parent, result, ctx, info);
+  } catch (error) {
+    if (error instanceof ValidationError) {
+      return {
+        Error: error.errors,
+      };
+    }
+    throw error;
+  }
+};
+
+const closeDelivery: IMiddleware<
+  {},
+  GraphQLContext,
+  GQLMutationCloseDeliveryArgs
+> = async (resolver, parent, args, ctx, info) => {
+  try {
+    const schema = object({
+      input: object({
+        clientMutationId: string(),
+        deliveryId: string()
+          .transform(function transformDeliveryId(val) {
+            if (!this.isType(val)) {
+              return val;
+            }
+            const { type, id } = fromGlobalId(val);
+            return type === 'Delivery'
+              ? id
+              : { invalidType: type, expected: 'Delivery' };
+          })
+          .required()
+          .test(
+            'valid delivery',
+            'must be a delivery for the delivery man',
+            async function testDeliveryManDelivery(val) {
+              const { deliveryManId } = this.parent;
+              const delivery = await ctx.models.Delivery.findOne({
+                where: {
+                  delivery_man_id: deliveryManId,
+                  id: val,
+                },
+              });
+              return !!delivery;
+            },
+          ),
+        deliveryManId: string()
+          .transform(function transformDeliveryId(val) {
+            if (!this.isType(val)) {
+              return val;
+            }
+            const { type, id } = fromGlobalId(val);
+            return type === 'DeliveryMan'
+              ? id
+              : { invalidType: type, expected: 'Delivery' };
+          })
+          .required(),
+        end_date: date().required(),
+        signature: mixed() as MixedSchema<FileUploadPromise>,
+      }),
+    });
+    const result = await schema.validate(args);
+    return resolver(parent, result, ctx, info);
+  } catch (error) {
+    if (error instanceof ValidationError) {
+      return {
+        Error: error.errors,
+      };
+    }
+    throw error;
+  }
+};
+
 const validators = {
   Mutation: {
     createDelivery,
     updateDelivery,
     deleteDelivery,
+    pickupDelivery,
+    closeDelivery,
   },
   Query: {
     deliveries,
