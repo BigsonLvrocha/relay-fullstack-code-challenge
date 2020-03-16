@@ -1,8 +1,8 @@
 import { object, ValidationError, string, number } from 'yup';
 import { IMiddleware } from 'graphql-middleware';
-
 import { anyNonNil } from 'is-uuid';
 import { fromGlobalId } from 'graphql-relay';
+
 import {
   GQLMutationCreateDeliveryManArgs,
   GQLMutationUpdateDeliveryManArgs,
@@ -10,6 +10,7 @@ import {
   GQLQueryDeliveryMansArgs,
 } from '../../generated/schema';
 import { GraphQLContext } from '../../context';
+import { deliveries } from '../delivery/delivery.validators';
 
 import createError = require('http-errors');
 
@@ -225,6 +226,9 @@ const validators = {
   },
   Query: {
     deliveryMans,
+  },
+  DeliveryMan: {
+    deliveries,
   },
 };
 
