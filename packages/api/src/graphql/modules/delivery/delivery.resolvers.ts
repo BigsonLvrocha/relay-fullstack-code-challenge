@@ -39,6 +39,32 @@ const resolvers: GQLResolvers = {
         },
       };
     },
+    async updateDelivery(_parent, args, ctx) {
+      const { deliveryId, values } = args.input;
+      const delivery = await ctx.models.Delivery.findByPk(deliveryId);
+      if (!delivery) {
+        return {
+          Error: ['Delivery not found'],
+        };
+      }
+      await delivery.update(values);
+      return {
+        delivery,
+      };
+    },
+    async deleteDelivery(_parent, args, ctx) {
+      const { deliveryId } = args.input;
+      const delivery = await ctx.models.Delivery.findByPk(deliveryId);
+      if (!delivery) {
+        return {
+          Error: ['Delivery not found'],
+        };
+      }
+      await delivery.destroy();
+      return {
+        deletedDeliveryId: toGlobalId('Delivery', deliveryId),
+      };
+    },
   },
   Query: {
     deliveries: (_parent, args, ctx) =>
