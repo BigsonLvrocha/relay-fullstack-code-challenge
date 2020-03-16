@@ -93,7 +93,7 @@ const createDelivery: IMiddleware<
   }
 };
 
-const deliveries: IMiddleware<
+export const deliveries: IMiddleware<
   {},
   GraphQLContext,
   GQLQueryDeliveriesArgs
