@@ -22,9 +22,13 @@ type CreateDeliveryPayload {
 input UpdateDeliveryInput {
   clientMutationId: String
   deliveryId: ID!
-  recipientId: ID
-  deliveryManId: ID
-  signatureId: ID
+  values: UpdateDeliveryValuesInput!
+}
+
+input UpdateDeliveryValuesInput {
+  recipient_id: ID
+  delivery_man_id: ID
+  signature_id: ID
   product: String
   canceled_at: DateTime
   start_date: DateTime
@@ -44,7 +48,7 @@ input DeleteDeliveryInput {
 
 type DeleteDeliveryPayload {
   clientMutationId: String
-  deletedDeliveryManId: ID
+  deletedDeliveryId: ID
   Error: [String!]
 }
 
