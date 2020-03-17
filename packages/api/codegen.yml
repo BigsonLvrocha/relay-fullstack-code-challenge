@@ -29,6 +29,7 @@ generates:
         DeliveryManEdge: ../../db/models/DeliveryMan#DeliveryMan
         Delivery: ../../db/models/Delivery#Delivery
         DeliveryEdge: ../modules/delivery/types/schema#DeliveryEdge
+        DeliveryProblem: ../../db/models/DeliveryProblem#DeliveryProblem
   data/schema.graphql:
     plugins:
       - schema-ast
