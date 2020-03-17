@@ -62,6 +62,7 @@ const resolvers: GQLResolvers = {
           canceled: args.filter!.canceled!,
           delivered: args.filter!.delivered!,
           delivery_man_id: id,
+          withProblemOnly: args.filter!.withProblemsOnly!,
         },
       }),
   },

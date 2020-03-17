@@ -166,6 +166,7 @@ export const deliveries: IMiddleware<
       filter: object({
         canceled: boolean().default(false),
         delivered: boolean().default(false),
+        withProblemsOnly: boolean().default(false),
       }),
     }).test(
       'valid connection args test',

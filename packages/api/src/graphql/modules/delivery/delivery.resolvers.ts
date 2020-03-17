@@ -23,6 +23,13 @@ const resolvers: GQLResolvers = {
       ctx.dataloaders.Recipient.load(recipient_id),
     signature: ({ signature_id }, _args, ctx) =>
       signature_id ? ctx.dataloaders.Avatar.load(signature_id) : null,
+    deliveryProblems: ({ id }, _args, ctx) =>
+      ctx.models.DeliveryProblem.findAll({
+        where: {
+          delivery_id: id,
+        },
+        raw: true,
+      }),
   },
   DeliveryEdge: {
     node: ({ node }, _args, ctx) =>
@@ -146,6 +153,7 @@ const resolvers: GQLResolvers = {
           ...args.filter!,
           canceled: args.filter!.canceled!,
           delivered: args.filter!.delivered!,
+          withProblemOnly: args.filter!.withProblemsOnly!,
         }!,
       }),
   },

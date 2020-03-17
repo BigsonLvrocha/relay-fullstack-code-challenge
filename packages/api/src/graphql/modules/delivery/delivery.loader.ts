@@ -48,6 +48,7 @@ type LoadAllDeliveryArgs = ConnectionArguments & {
     canceled: boolean;
     delivered: boolean;
     delivery_man_id?: string;
+    withProblemOnly: boolean;
   };
 };
 
@@ -70,6 +71,17 @@ export async function loadAll(ctx: GraphQLContext, args: LoadAllDeliveryArgs) {
           : {},
       ],
     },
+    ...(args.filter.withProblemOnly
+      ? {
+          include: [
+            {
+              model: ctx.models.DeliveryProblem,
+              required: true,
+              attributes: [],
+            },
+          ],
+        }
+      : {}),
   };
   const totalCount = await ctx.models.Delivery.count(findOptions);
   if (totalCount === 0) {
