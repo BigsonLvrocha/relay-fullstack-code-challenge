@@ -8,6 +8,7 @@ import {
   object,
   MixedSchema,
 } from 'yup';
+import { Op } from 'sequelize';
 import { IMiddleware } from 'graphql-middleware';
 import { anyNonNil } from 'is-uuid';
 import { fromGlobalId } from 'graphql-relay';
@@ -354,8 +355,36 @@ const pickupDelivery: IMiddleware<
             const { type, id } = fromGlobalId(val);
             return type === 'DeliveryMan'
               ? id
-              : { invalidType: type, expected: 'Delivery' };
+              : { invalidType: type, expected: 'DeliveryMan' };
           })
+          .test(
+            'delivery limit',
+            'reached delivery limit',
+            async function testDeliveryLimit(val) {
+              if (!val) {
+                return true;
+              }
+              const { start_date }: { start_date: Date } = this.parent;
+              const start = setMilliseconds(
+                setSeconds(setMinutes(setHours(start_date, 8), 0), 0),
+                0,
+              );
+              const end = setMilliseconds(
+                setSeconds(setMinutes(setHours(start_date, 18), 0), 0),
+                0,
+              );
+              const todayDeliveries = await ctx.models.Delivery.count({
+                where: {
+                  delivery_man_id: val,
+                  start_date: {
+                    [Op.gt]: start,
+                    [Op.lt]: end,
+                  },
+                },
+              });
+              return todayDeliveries <= 5;
+            },
+          )
           .required(),
         start_date: date().test(
           'valid time',
