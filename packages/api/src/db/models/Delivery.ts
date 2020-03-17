@@ -90,6 +90,9 @@ export function build(sequelize: Sequelize) {
     models.Delivery.belongsTo(models.Avatar, {
       foreignKey: 'signature_id',
     });
+    models.Delivery.hasMany(models.DeliveryProblem, {
+      foreignKey: 'delivery_id',
+    });
   };
 
   return Delivery;
