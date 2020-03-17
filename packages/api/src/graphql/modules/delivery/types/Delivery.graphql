@@ -16,4 +16,5 @@ type Delivery implements node {
   end_date: DateTime
   created_at: DateTime!
   updated_at: DateTime!
+  deliveryProblems: [DeliveryProblem!]
 }
