@@ -4,6 +4,7 @@ import { getLoader as getUserLoader } from './User';
 import { getLoader as getAvatarLoader } from './Avatar';
 import { getLoader as getDeliveryManLoader } from './DeliveryMan';
 import { getLoader as getDeliveryLoader } from './Delivery';
+import { getLoader as getDeliveryProblemLoader } from './DeliveryProblem';
 
 export function getLoaders(models: Models) {
   return {
@@ -12,5 +13,6 @@ export function getLoaders(models: Models) {
     Avatar: getAvatarLoader(models),
     DeliveryMan: getDeliveryManLoader(models),
     Delivery: getDeliveryLoader(models),
+    DeliveryProblem: getDeliveryProblemLoader(models),
   };
 }
