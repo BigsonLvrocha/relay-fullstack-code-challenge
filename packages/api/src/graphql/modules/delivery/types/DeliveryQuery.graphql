@@ -22,4 +22,5 @@ type DeliveryEdge {
 input DeliveriesFilter {
   canceled: Boolean = false
   delivered: Boolean = false
+  withProblemsOnly: Boolean = false
 }
