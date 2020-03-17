@@ -4,6 +4,6 @@ import { mutationMiddleware } from './mutation';
 
 export const middlewares = [
   shieldMiddleware,
-  validatorsMiddleware,
   mutationMiddleware,
+  validatorsMiddleware,
 ];
