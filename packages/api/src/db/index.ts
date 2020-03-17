@@ -6,6 +6,7 @@ import * as Recipient from './models/Recipient';
 import * as Avatar from './models/Avatar';
 import * as DeliveryMan from './models/DeliveryMan';
 import * as Delivery from './models/Delivery';
+import * as DeliveryProblem from './models/DeliveryProblem';
 
 function isNodeEnvValid(env?: string): env is keyof typeof config {
   return !!env && env in config;
@@ -28,6 +29,7 @@ function buildModel(seq: Sequelize) {
     Avatar: Avatar.build(seq),
     DeliveryMan: DeliveryMan.build(seq),
     Delivery: Delivery.build(seq),
+    DeliveryProblem: DeliveryProblem.build(seq),
   };
   Object.keys(models).forEach(key => {
     const modelKey = key as keyof typeof models;
