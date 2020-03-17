@@ -1,0 +1,16 @@
+type Mutation {
+  createDeliveryProblem(input: CreateDeliveryProblemInput!): CreateDeliveryProblemPayload!
+}
+
+input CreateDeliveryProblemInput {
+  clientMutationId: String
+  delivery_id: ID!
+  description: String!
+}
+
+type CreateDeliveryProblemPayload {
+  clientMutationId: String
+  deliveryProblem: DeliveryProblem
+  Error: [String!]
+}
+

@@ -1,0 +1,10 @@
+type DeliveryProblem implements node {
+  id: ID!
+  _id: String!
+  delivery_id: String!
+  deliveryId: ID!
+  delivery: Delivery!
+  description: String!
+  created_at: DateTime!
+  updated_at: DateTime!
+}
