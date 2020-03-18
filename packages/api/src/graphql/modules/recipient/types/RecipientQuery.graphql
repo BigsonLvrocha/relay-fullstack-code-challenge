@@ -1,0 +1,24 @@
+type Query {
+  recipients(
+    first: NonNegativeInt
+    last: NonNegativeInt
+    after: String
+    before: String
+    filter: RecipientsFilter
+  ): RecipientConnection
+}
+
+type RecipientConnection {
+  pageInfo: PageInfo!
+  totalCount: NonNegativeInt!
+  edges: [RecipientEdge!]!
+}
+
+type RecipientEdge {
+  cursor: String!
+  node: Recipient!
+}
+
+input RecipientsFilter {
+  query: String
+}
