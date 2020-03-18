@@ -49,6 +49,7 @@ type LoadAllDeliveryArgs = ConnectionArguments & {
     delivered: boolean;
     delivery_man_id?: string;
     withProblemOnly: boolean;
+    query?: string | null;
   };
 };
 
@@ -67,6 +68,13 @@ export async function loadAll(ctx: GraphQLContext, args: LoadAllDeliveryArgs) {
         args.filter.delivery_man_id
           ? {
               delivery_man_id: args.filter.delivery_man_id,
+            }
+          : {},
+        args.filter.query
+          ? {
+              product: {
+                [Op.iLike]: `%${args.filter.query}%`,
+              },
             }
           : {},
       ],
