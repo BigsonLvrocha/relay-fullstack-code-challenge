@@ -4,7 +4,8 @@ services:
     image: 'postgres'
     environment:
       POSTGRES_PASSWORD: Postgres
-      PGDATA: certification10pgdata
+    volumes:
+      - certification10pgdata:/var/lib/postgresql/data
     ports:
       - '5432:5432'
 
