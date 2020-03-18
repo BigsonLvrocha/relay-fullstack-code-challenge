@@ -1,5 +1,6 @@
 import { toGlobalId } from 'graphql-relay';
 import { GQLResolvers } from '../../generated/schema';
+import { loadAll } from './recipient.loader';
 
 const resolvers: GQLResolvers = {
   Mutation: {
@@ -33,6 +34,16 @@ const resolvers: GQLResolvers = {
     },
     id({ id }) {
       return toGlobalId('Recipient', id);
+    },
+  },
+  Query: {
+    async recipients(_parent, args, ctx) {
+      return loadAll(ctx, args);
+    },
+  },
+  RecipientEdge: {
+    node({ node }, _args, ctx) {
+      return ctx.dataloaders.Recipient.load(node.id);
     },
   },
 };
