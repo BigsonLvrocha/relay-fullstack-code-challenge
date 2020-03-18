@@ -197,6 +197,9 @@ const deliveryMans: IMiddleware<
           ? id
           : { invalidCursorType: type, expected: 'DeliveryManEdgeCursor' };
       }),
+      filter: object({
+        query: string(),
+      }),
     }).test(
       'valid connection args test',
       'invalid connection args',

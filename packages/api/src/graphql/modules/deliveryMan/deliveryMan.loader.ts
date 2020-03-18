@@ -1,4 +1,4 @@
-import { Op } from 'sequelize';
+import { Op, FindOptions } from 'sequelize';
 import { ConnectionArguments, toGlobalId } from 'graphql-relay';
 import { GraphQLContext } from '../../context';
 import { DeliveryMan } from '../../../db/models/DeliveryMan';
@@ -7,18 +7,45 @@ export function model2cursor(model: DeliveryMan) {
   return toGlobalId('DeliveryManEdgeCursor', model.email);
 }
 
-async function cursor2offset(ctx: GraphQLContext, cursor: string) {
+async function cursor2offset(
+  ctx: GraphQLContext,
+  cursor: string,
+  findOptions: FindOptions,
+) {
   return ctx.models.DeliveryMan.count({
     where: {
-      email: {
-        [Op.lt]: cursor,
-      },
+      [Op.and]: [
+        findOptions.where || {},
+        {
+          email: {
+            [Op.lt]: cursor,
+          },
+        },
+      ],
     },
   });
 }
 
-export async function loadAll(ctx: GraphQLContext, args: ConnectionArguments) {
-  const totalCount = await ctx.models.DeliveryMan.count();
+type LoadAllDeliveryManFilter = ConnectionArguments & {
+  filter?: {
+    query?: string | null;
+  } | null;
+};
+
+export async function loadAll(
+  ctx: GraphQLContext,
+  args: LoadAllDeliveryManFilter,
+) {
+  const findOptions: FindOptions = {
+    where: args.filter?.query
+      ? {
+          name: {
+            [Op.iLike]: `%${args.filter.query}%`,
+          },
+        }
+      : {},
+  };
+  const totalCount = await ctx.models.DeliveryMan.count(findOptions);
   if (totalCount === 0) {
     return {
       totalCount,
@@ -34,12 +61,12 @@ export async function loadAll(ctx: GraphQLContext, args: ConnectionArguments) {
   if (args.first) {
     limit = args.first;
     if (args.after) {
-      offset = (await cursor2offset(ctx, args.after)) + 1;
+      offset = (await cursor2offset(ctx, args.after, findOptions)) + 1;
     }
   } else if (args.last) {
     limit = args.last;
     if (args.before) {
-      const offsetBefore = await cursor2offset(ctx, args.before);
+      const offsetBefore = await cursor2offset(ctx, args.before, findOptions);
       offset = offsetBefore - limit;
     } else {
       offset = totalCount - args.last;
@@ -50,6 +77,7 @@ export async function loadAll(ctx: GraphQLContext, args: ConnectionArguments) {
     }
   }
   const edges = await ctx.models.DeliveryMan.findAll({
+    ...findOptions,
     limit,
     offset,
     raw: true,
