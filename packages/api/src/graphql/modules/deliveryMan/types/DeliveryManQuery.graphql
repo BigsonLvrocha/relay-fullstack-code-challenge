@@ -4,7 +4,7 @@ type Query {
     last: NonNegativeInt
     after: String
     before: String
-    filter: DeliveriesFilter
+    filter: DeliveryMansFilter
   ): DeliveryManConnection
   deliveryMan(id: ID!): DeliveryMan!
 }
@@ -25,4 +25,8 @@ type PageInfo {
 type DeliveryManEdge {
   cursor: String!
   node: DeliveryMan
+}
+
+input DeliveryMansFilter {
+  query: String
 }
