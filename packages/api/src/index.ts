@@ -5,10 +5,14 @@ import { authMiddleware } from './middleware/authMiddleware';
 
 import Bodyparser = require('koa-bodyparser');
 import Koa = require('koa');
+import logger = require('koa-logger');
+import cors = require('@koa/cors');
 
 const app = new Koa();
 
+app.use(cors());
 app.use(Bodyparser());
+app.use(logger());
 app.use(errorHandler());
 app.use(errorMiddleware);
 app.use(authMiddleware);
