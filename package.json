@@ -9,21 +9,29 @@
   ],
   "private": true,
   "devDependencies": {
-    "@graphql-codegen/cli": "^1.12.2",
-    "@typescript-eslint/eslint-plugin": "^2.21.0",
-    "@typescript-eslint/parser": "^2.21.0",
+    "@graphql-codegen/cli": "^1.13.1",
+    "@typescript-eslint/eslint-plugin": "^2.24.0",
+    "@typescript-eslint/parser": "^2.24.0",
+    "create-react-app": "^3.4.0",
     "eslint": "^6.8.0",
-    "eslint-config-airbnb": "^18.0.1",
+    "eslint-config-airbnb": "^18.1.0",
     "eslint-config-prettier": "^6.10.0",
+    "eslint-config-react-app": "^5.2.0",
+    "eslint-plugin-flowtype": "^4.6.0",
     "eslint-plugin-import": "^2.20.1",
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-prettier": "^3.1.2",
-    "eslint-plugin-react": "^7.18.3",
+    "eslint-plugin-react": "^7.19.0",
     "eslint-plugin-react-hooks": "^2.5.0",
+    "graphql": "^14.6.0",
     "lerna": "^3.20.2",
-    "npm-check-updates": "^4.0.2",
+    "npm-check-updates": "^4.0.4",
     "prettier": "^1.19.1",
     "ts-node": "^8.6.2",
-    "typescript": "^3.8.2"
+    "typescript": "^3.8.3"
+  },
+  "scripts": {
+    "run:api": "yarn workspace @certification10/api",
+    "run:frontend": "yarn workspace @certification10/frontend"
   }
 }
