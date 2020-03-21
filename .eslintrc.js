@@ -8,7 +8,8 @@ module.exports = {
   extends: [
     'plugin:react/recommended',
     'airbnb',
-    'plugin:prettier/recommended'
+    'plugin:prettier/recommended',
+    'react-app',
   ],
   globals: {
     Atomics: 'readonly',
@@ -41,6 +42,7 @@ module.exports = {
     'react',
     '@typescript-eslint',
     'prettier',
+    'react-hooks',
   ],
   rules: {
     "import/prefer-default-export": "off",
@@ -56,6 +58,11 @@ module.exports = {
       }
     ],
     "camelcase": "off",
-    "no-underscore-dangle": "off"
+    "no-underscore-dangle": "off",
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx", "tsx"] }],
+    "react/prop-types": "off",
+    'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
   }
 };
