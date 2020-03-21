@@ -18,15 +18,12 @@ const resolvers: GQLResolvers = {
       if (!isSupportedType(type, ctx)) {
         return null;
       }
-      const loader = ctx.dataloaders[type];
-      const node = await loader.load(id);
-      if (!node) {
-        return null;
-      }
-      return {
+      const node = await ctx.dataloaders[type].load(id);
+      const response = {
         ...node,
         __typename: type,
       };
+      return response as any;
     },
   },
   node: {
