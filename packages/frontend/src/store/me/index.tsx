@@ -62,7 +62,6 @@ export const MeStoreProvider: React.FunctionComponent = ({ children }) => {
   if (token && !state.checked) {
     fetchQuery<meQuery>(Environment, query, {})
       .then(({ me }) => {
-        console.log('logged in', me);
         dispatch({
           type: 'Login',
           payload: {
