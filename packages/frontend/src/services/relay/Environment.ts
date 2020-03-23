@@ -5,13 +5,15 @@ import {
   Store,
   FetchFunction,
 } from 'relay-runtime';
+import { getAuthToken } from '../session';
 
 const fetchQuery: FetchFunction = async (operation, variables) => {
-  console.log(process.env);
+  const token = getAuthToken();
   const response = await fetch(process.env.REACT_APP_GRAPHQL_ENDPOINT!, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
     },
     body: JSON.stringify({
       query: operation.text,
