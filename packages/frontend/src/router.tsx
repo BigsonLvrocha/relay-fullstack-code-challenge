@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
 
 import { useMeStore } from './store/me';
 import { Home } from './pages/home';
@@ -16,6 +17,9 @@ export const Router: React.FunctionComponent = () => {
             <Route path="/home">
               <Home />
             </Route>
+            <Route path="/login">
+              <Redirect to="/home" />
+            </Route>
             <Route>
               <NotFound />
             </Route>
@@ -29,6 +33,7 @@ export const Router: React.FunctionComponent = () => {
           </>
         )}
       </Switch>
+      <ToastContainer />
     </BrowserRouter>
   );
 };
