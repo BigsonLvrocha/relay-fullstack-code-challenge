@@ -1,8 +1,19 @@
 import * as React from 'react';
 import { Formik, Form } from 'formik';
 import { object, string } from 'yup';
+import { commitMutation, fetchQuery } from 'react-relay';
+import { toast } from 'react-toastify';
+import { useHistory } from 'react-router-dom';
 
+import { setAuthToken } from '../../services/session';
+import { useRelayEnv } from '../../store/relayEnv';
+import { query } from '../../store/me/meQuery';
+import { useMeStore } from '../../store/me';
+import { meQuery } from '../../store/me/__generated__/meQuery.graphql';
 import logo from '../../assets/fastfeet-logo.png';
+
+import { mutation } from './LoginMutation';
+import { LoginMutation } from './__generated__/LoginMutation.graphql';
 
 import {
   Background,
@@ -24,6 +35,9 @@ const SignupSchema = object({
 });
 
 export const Login: React.FunctionComponent = () => {
+  const env = useRelayEnv();
+  const router = useHistory();
+  const { actions } = useMeStore();
   return (
     <Background>
       <Container>
@@ -33,9 +47,49 @@ export const Login: React.FunctionComponent = () => {
             email: '',
           }}
           validationSchema={SignupSchema}
-          onSubmit={values => {
-            // same shape as initial values
-            console.log(values);
+          onSubmit={({ password, email }) => {
+            commitMutation<LoginMutation>(env, {
+              mutation,
+              variables: {
+                input: {
+                  password,
+                  email,
+                },
+              },
+              onCompleted({ login }) {
+                if (!login) {
+                  toast.error('Server error');
+                  return;
+                }
+                if (login.error) {
+                  login.error.forEach(error => toast.error(error));
+                  return;
+                }
+                if (login.token) {
+                  setAuthToken(login.token);
+                  fetchQuery<meQuery>(env, query, {})
+                    .then(({ me }) => {
+                      actions.login({
+                        ...me,
+                        token: login.token!,
+                      });
+                      router.push('/home');
+                    })
+                    .catch((error: any) => {
+                      // eslint-disable-next-line no-console
+                      console.error(error);
+                      toast.error('Server error');
+                      setAuthToken(null);
+                      actions.logout();
+                    });
+                }
+              },
+              onError(error) {
+                // eslint-disable-next-line no-console
+                console.error(error);
+                toast.error('Server error');
+              },
+            });
           }}
         >
           {() => (
@@ -50,7 +104,7 @@ export const Login: React.FunctionComponent = () => {
                 type="password"
                 placeholder="*************"
               />
-              <ErrorText name="email" />
+              <ErrorText name="password" />
               <Button type="submit">Entrar no sistema</Button>
             </Form>
           )}
