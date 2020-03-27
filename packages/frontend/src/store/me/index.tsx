@@ -7,7 +7,7 @@ import Environment from '../../services/relay/Environment';
 import { meQuery } from './__generated__/meQuery.graphql';
 import { query } from './meQuery';
 
-type MeType = {
+export type MeType = {
   id: string;
   name: string;
   email: string;
@@ -59,25 +59,29 @@ const MeContext = React.createContext({
 export const MeStoreProvider: React.FunctionComponent = ({ children }) => {
   const [state, dispatch] = React.useReducer(reducer, initialState);
   const token = getAuthToken();
-  if (token && !state.checked) {
-    fetchQuery<meQuery>(Environment, query, {})
-      .then(({ me }) => {
-        dispatch({
-          type: 'Login',
-          payload: {
-            me: {
-              ...me,
-              token,
+  if (!state.checked) {
+    if (token) {
+      fetchQuery<meQuery>(Environment, query, {})
+        .then(({ me }) => {
+          dispatch({
+            type: 'Login',
+            payload: {
+              me: {
+                ...me,
+                token,
+              },
             },
-          },
+          });
+        })
+        .catch((error: any) => {
+          // eslint-disable-next-line no-console
+          console.error(error);
+          setAuthToken(null);
+          dispatch({ type: 'Logout' });
         });
-      })
-      .catch((error: any) => {
-        // eslint-disable-next-line no-console
-        console.error(error);
-        setAuthToken(null);
-        dispatch({ type: 'Logout' });
-      });
+    } else {
+      dispatch({ type: 'Logout' });
+    }
   }
   return (
     <MeContext.Provider value={{ state, dispatch }}>
