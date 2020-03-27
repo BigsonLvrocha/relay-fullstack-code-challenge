@@ -36,7 +36,7 @@ module.exports = {
       "node": {
         "extensions": [".js", ".jsx", ".ts", ".tsx"]
       }
-    }
+    },
   },
   plugins: [
     'react',
@@ -64,5 +64,11 @@ module.exports = {
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx", "tsx"] }],
     "react/prop-types": "off",
     'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
+    'import/no-unresolved': [
+      'error',
+      {
+        'ignore': [ '\.svg' ]
+      }
+    ]
   }
 };
