@@ -3,7 +3,6 @@ import { Formik, Form } from 'formik';
 import { object, string } from 'yup';
 import { commitMutation, fetchQuery } from 'react-relay';
 import { toast } from 'react-toastify';
-import { useHistory } from 'react-router-dom';
 
 import { setAuthToken } from '../../services/session';
 import { useRelayEnv } from '../../store/relayEnv';
@@ -36,7 +35,6 @@ const SignupSchema = object({
 
 export const Login: React.FunctionComponent = () => {
   const env = useRelayEnv();
-  const router = useHistory();
   const { actions } = useMeStore();
   return (
     <Background>
@@ -73,7 +71,6 @@ export const Login: React.FunctionComponent = () => {
                         ...me,
                         token: login.token!,
                       });
-                      router.push('/home');
                     })
                     .catch((error: any) => {
                       // eslint-disable-next-line no-console
