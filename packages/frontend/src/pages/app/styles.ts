@@ -9,6 +9,7 @@ export const NavBarContainer = styled.div`
   padding-left: 30px;
   padding-right: 30px;
   border: 1px solid #dddddd;
+  background-color: #fff;
 `;
 
 export const LeftNavBarContainer = styled.div`
