@@ -113,10 +113,17 @@ export const deliveries: IMiddleware<
 > = async (resolver, parent, args, ctx, info) => {
   try {
     const schema = object({
-      first: number().positive(),
-      last: number().positive(),
+      first: number()
+        .positive()
+        .nullable(),
+      last: number()
+        .positive()
+        .nullable(),
       after: string()
         .transform(function transformGlobalCursor(val) {
+          if (!val) {
+            return val;
+          }
           if (!this.isType(val)) {
             return val;
           }
@@ -138,7 +145,8 @@ export const deliveries: IMiddleware<
               anyNonNil(id) && !Number.isNaN(createdAtStr) && createdAtInt > 0
             );
           },
-        ),
+        )
+        .nullable(),
       before: string()
         .transform(function transformGlobalCursor(val) {
           if (!this.isType(val)) {
@@ -162,7 +170,8 @@ export const deliveries: IMiddleware<
               anyNonNil(id) && !Number.isNaN(createdAtStr) && createdAtInt > 0
             );
           },
-        ),
+        )
+        .nullable(),
       filter: object({
         canceled: boolean().default(false),
         delivered: boolean().default(false),
