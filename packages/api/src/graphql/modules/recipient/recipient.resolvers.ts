@@ -43,7 +43,7 @@ const resolvers: GQLResolvers = {
   },
   RecipientEdge: {
     node({ node }, _args, ctx) {
-      return ctx.dataloaders.Recipient.load(node.id);
+      return node ? ctx.dataloaders.Recipient.load(node.id) : null;
     },
   },
 };
