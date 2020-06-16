@@ -1,9 +1,9 @@
 type Avatar implements node {
   id: ID!
   _id: String!
-  original_name: String!
-  path: String!
-  created_at: DateTime!
-  updated_at: DateTime!
-  url: String!
+  original_name: String
+  path: String
+  created_at: DateTime
+  updated_at: DateTime
+  url: String
 }

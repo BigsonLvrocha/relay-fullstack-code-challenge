@@ -6,24 +6,24 @@ type Query {
     before: String
     filter: DeliveryMansFilter
   ): DeliveryManConnection
-  deliveryMan(id: ID!): DeliveryMan!
+  deliveryMan(id: ID!): DeliveryMan
 }
 
 type DeliveryManConnection {
-  pageInfo: PageInfo!
-  edges: [DeliveryManEdge!]!
-  totalCount: NonNegativeInt!
+  pageInfo: PageInfo
+  edges: [DeliveryManEdge]
+  totalCount: NonNegativeInt
 }
 
 type PageInfo {
-  hasNextPage: Boolean!
-  hasPreviousPage: Boolean!
+  hasNextPage: Boolean
+  hasPreviousPage: Boolean
   endCursor: String
   startCursor: String
 }
 
 type DeliveryManEdge {
-  cursor: String!
+  cursor: String
   node: DeliveryMan
 }
 

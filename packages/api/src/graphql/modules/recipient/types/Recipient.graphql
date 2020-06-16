@@ -1,13 +1,13 @@
 type Recipient implements node {
   id: ID!
   _id: String!
-  name: String!
-  street: String!
+  name: String
+  street: String
   number: NonNegativeInt
   complement: String
-  state: BrState!
-  city: String!
-  cep: String!
-  created_at: DateTime!
-  updated_at: DateTime!
+  state: BrState
+  city: String
+  cep: String
+  created_at: DateTime
+  updated_at: DateTime
 }

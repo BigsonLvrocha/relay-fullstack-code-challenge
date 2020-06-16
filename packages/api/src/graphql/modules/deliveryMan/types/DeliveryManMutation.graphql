@@ -1,7 +1,7 @@
 type Mutation {
-  createDeliveryMan(input: CreateDeliveryManInput!): CreateDeliveryManPayload!
-  updateDeliveryMan(input: UpdateDeliveryManInput!): UpdateDeliveryManPayload!
-  deleteDeliveryMan(input: DeleteDeliveryManInput!): DeleteDeliveryManPayload!
+  createDeliveryMan(input: CreateDeliveryManInput!): CreateDeliveryManPayload
+  updateDeliveryMan(input: UpdateDeliveryManInput!): UpdateDeliveryManPayload
+  deleteDeliveryMan(input: DeleteDeliveryManInput!): DeleteDeliveryManPayload
 }
 
 input CreateDeliveryManInput {
@@ -18,7 +18,7 @@ input CreateDeliveryManInputValues {
 type CreateDeliveryManPayload {
   clientMutationId: String
   deliveryMan: DeliveryMan
-  Error: [String!]
+  Error: [String]
 }
 
 
@@ -37,7 +37,7 @@ input UpdateDeliveryManInputValues {
 type UpdateDeliveryManPayload {
   clientMutationId: String
   deliveryMan: DeliveryMan
-  Error: [String!]
+  Error: [String]
 }
 
 input DeleteDeliveryManInput {
@@ -48,5 +48,5 @@ input DeleteDeliveryManInput {
 type DeleteDeliveryManPayload {
   clientMutationId: String
   deletedDeliveryManId: ID
-  Error: [String!]
+  Error: [String]
 }

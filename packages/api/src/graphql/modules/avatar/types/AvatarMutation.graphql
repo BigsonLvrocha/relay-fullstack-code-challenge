@@ -10,5 +10,5 @@ input UploadAvatarInput {
 type UploadAvatarPayload {
   clientMutationId: String
   avatar: Avatar
-  Error: [String!]
+  Error: [String]
 }

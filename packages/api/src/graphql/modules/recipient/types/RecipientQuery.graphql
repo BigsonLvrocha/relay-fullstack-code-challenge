@@ -9,14 +9,14 @@ type Query {
 }
 
 type RecipientConnection {
-  pageInfo: PageInfo!
-  totalCount: NonNegativeInt!
-  edges: [RecipientEdge!]!
+  pageInfo: PageInfo
+  totalCount: NonNegativeInt
+  edges: [RecipientEdge]
 }
 
 type RecipientEdge {
-  cursor: String!
-  node: Recipient!
+  cursor: String
+  node: Recipient
 }
 
 input RecipientsFilter {

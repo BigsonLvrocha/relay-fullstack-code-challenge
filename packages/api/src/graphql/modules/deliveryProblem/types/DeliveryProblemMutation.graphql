@@ -1,5 +1,5 @@
 type Mutation {
-  createDeliveryProblem(input: CreateDeliveryProblemInput!): CreateDeliveryProblemPayload!
+  createDeliveryProblem(input: CreateDeliveryProblemInput!): CreateDeliveryProblemPayload
 }
 
 input CreateDeliveryProblemInput {
@@ -11,6 +11,6 @@ input CreateDeliveryProblemInput {
 type CreateDeliveryProblemPayload {
   clientMutationId: String
   deliveryProblem: DeliveryProblem
-  Error: [String!]
+  Error: [String]
 }
 

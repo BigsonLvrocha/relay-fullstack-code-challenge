@@ -1,6 +1,6 @@
 type Mutation {
-  createRecipient(input: CreateRecipientInput!): CreateRecipientPayload!
-  updateRecipient(input: UpdateRecipientInput!): UpdateRecipientPayload!
+  createRecipient(input: CreateRecipientInput!): CreateRecipientPayload
+  updateRecipient(input: UpdateRecipientInput!): UpdateRecipientPayload
 }
 
 input CreateRecipientInput {
@@ -21,7 +21,7 @@ input CreateRecipientValuesInput {
 type CreateRecipientPayload {
   clientMutationId: String
   recipient: Recipient
-  Error: [String!]
+  Error: [String]
 }
 
 input UpdateRecipientInput {
@@ -43,5 +43,5 @@ input UpdateRecipientValuesInput {
 type UpdateRecipientPayload {
   clientMutationId: String
   recipient: Recipient
-  Error: [String!]
+  Error: [String]
 }
