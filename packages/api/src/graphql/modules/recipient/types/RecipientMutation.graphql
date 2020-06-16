@@ -1,0 +1,47 @@
+type Mutation {
+  createRecipient(input: CreateRecipientInput!): CreateRecipientPayload
+  updateRecipient(input: UpdateRecipientInput!): UpdateRecipientPayload
+}
+
+input CreateRecipientInput {
+  clientMutationId: String
+  values: CreateRecipientValuesInput!
+}
+
+input CreateRecipientValuesInput {
+  name: String!
+  street: String!
+  number: NonNegativeInt
+  complement: String
+  state: BrState!
+  city: String!
+  cep: String!
+}
+
+type CreateRecipientPayload {
+  clientMutationId: String
+  recipient: Recipient
+  Error: [String]
+}
+
+input UpdateRecipientInput {
+  clientMutationId: String
+  id: ID!
+  values: UpdateRecipientValuesInput!
+}
+
+input UpdateRecipientValuesInput {
+  name: String
+  street: String
+  number: NonNegativeInt
+  complement: String
+  state: BrState
+  city: String
+  cep: String
+}
+
+type UpdateRecipientPayload {
+  clientMutationId: String
+  recipient: Recipient
+  Error: [String]
+}

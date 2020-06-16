@@ -1,0 +1,52 @@
+type Mutation {
+  createDeliveryMan(input: CreateDeliveryManInput!): CreateDeliveryManPayload
+  updateDeliveryMan(input: UpdateDeliveryManInput!): UpdateDeliveryManPayload
+  deleteDeliveryMan(input: DeleteDeliveryManInput!): DeleteDeliveryManPayload
+}
+
+input CreateDeliveryManInput {
+  clientMutationId: String
+  values: CreateDeliveryManInputValues!
+}
+
+input CreateDeliveryManInputValues {
+  name: String!
+  avatarId: ID
+  email: EmailAddress!
+}
+
+type CreateDeliveryManPayload {
+  clientMutationId: String
+  deliveryMan: DeliveryMan
+  Error: [String]
+}
+
+
+input UpdateDeliveryManInput {
+  clientMutationId: String
+  id: ID!
+  values: UpdateDeliveryManInputValues!
+}
+
+input UpdateDeliveryManInputValues {
+  name: String
+  avatarId: ID
+  email: String
+}
+
+type UpdateDeliveryManPayload {
+  clientMutationId: String
+  deliveryMan: DeliveryMan
+  Error: [String]
+}
+
+input DeleteDeliveryManInput {
+  clientMutationId: String
+  id: ID!
+}
+
+type DeleteDeliveryManPayload {
+  clientMutationId: String
+  deletedDeliveryManId: ID
+  Error: [String]
+}

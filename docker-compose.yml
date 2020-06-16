@@ -1,0 +1,13 @@
+version: '3'
+services:
+  postgres:
+    image: 'postgres'
+    environment:
+      POSTGRES_PASSWORD: Postgres
+    volumes:
+      - certification10pgdata:/var/lib/postgresql/data
+    ports:
+      - '5432:5432'
+
+volumes:
+  certification10pgdata:

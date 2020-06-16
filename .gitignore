@@ -1,0 +1,9 @@
+node_modules
+dist
+.env
+yarn-error.log
+data
+generated
+tmp
+enunciados
+__generated__

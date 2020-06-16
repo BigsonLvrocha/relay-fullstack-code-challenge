@@ -1,0 +1,35 @@
+overwrite: true
+schema: src/graphql/modules/**/*.graphql
+generates:
+  src/graphql/generated/schema.ts:
+    plugins:
+      - "typescript"
+      - "typescript-resolvers"
+    config:
+      contextType: '../context#GraphQLContext'
+      scalars:
+        DateTime: Date
+        EmailAddress: string
+        NegativeFloat: number
+        NegativeInt: number
+        NonNegativeFloat: number
+        NonNegativeInt: number
+        NonPositiveFloat: number
+        NonPositiveInt: number
+        PositiveFloat: number
+        PositiveInt: number
+        Upload: '../modules/scalars/scalarHelper#FileUploadPromise'
+      typesPrefix: GQL
+      enumsAsTypes: true
+      mappers:
+        User: ../../db/models/User#User
+        Recipient: ../../db/models/Recipient#Recipient
+        Avatar: ../../db/models/Avatar#Avatar
+        DeliveryMan: ../../db/models/DeliveryMan#DeliveryMan
+        DeliveryManEdge: ../../db/models/DeliveryMan#DeliveryMan
+        Delivery: ../../db/models/Delivery#Delivery
+        DeliveryEdge: ../modules/delivery/types/schema#DeliveryEdge
+        DeliveryProblem: ../../db/models/DeliveryProblem#DeliveryProblem
+  ../frontend/data/schema.graphql:
+    plugins:
+      - schema-ast
