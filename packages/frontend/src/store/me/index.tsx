@@ -63,15 +63,22 @@ export const MeStoreProvider: React.FunctionComponent = ({ children }) => {
     if (token) {
       fetchQuery<meQuery>(Environment, query, {})
         .then(({ me }) => {
-          dispatch({
-            type: 'Login',
-            payload: {
-              me: {
-                ...me,
-                token,
+          if (me && me.name && me.id && me.email) {
+            dispatch({
+              type: 'Login',
+              payload: {
+                me: {
+                  id: me.id,
+                  email: me.email,
+                  name: me.name,
+                  token,
+                },
               },
-            },
-          });
+            });
+          } else {
+            setAuthToken(null);
+            dispatch({ type: 'Logout' });
+          }
         })
         .catch((error: any) => {
           // eslint-disable-next-line no-console
