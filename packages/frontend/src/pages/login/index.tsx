@@ -67,10 +67,17 @@ export const Login: React.FunctionComponent = () => {
                   setAuthToken(login.token);
                   fetchQuery<meQuery>(env, query, {})
                     .then(({ me }) => {
-                      actions.login({
-                        ...me,
-                        token: login.token!,
-                      });
+                      if (me && me.email && me.name && me.id) {
+                        actions.login({
+                          id: me.id,
+                          email: me.email,
+                          name: me.name,
+                          token: login.token!,
+                        });
+                      } else {
+                        setAuthToken(null);
+                        actions.logout();
+                      }
                     })
                     .catch((error: any) => {
                       // eslint-disable-next-line no-console
