@@ -30,6 +30,18 @@ const resolvers: GQLResolvers = {
         },
         raw: true,
       }),
+    status({ start_date, canceled_at, end_date }) {
+      if (!start_date) {
+        return 'PENDING';
+      }
+      if (canceled_at) {
+        return 'CANCELLED';
+      }
+      if (end_date) {
+        return 'DELIVERED';
+      }
+      return 'DELIVERING';
+    },
   },
   DeliveryEdge: {
     node: ({ node }, _args, ctx) =>
