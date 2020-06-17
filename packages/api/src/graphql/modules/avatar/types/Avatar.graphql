@@ -1,4 +1,4 @@
-type Avatar implements node {
+type Avatar implements Node {
   id: ID!
   _id: String!
   original_name: String

@@ -1,4 +1,4 @@
-type DeliveryProblem implements node {
+type DeliveryProblem implements Node {
   id: ID!
   _id: String!
   delivery_id: String

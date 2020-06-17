@@ -1,4 +1,4 @@
-type Recipient implements node {
+type Recipient implements Node {
   id: ID!
   _id: String!
   name: String

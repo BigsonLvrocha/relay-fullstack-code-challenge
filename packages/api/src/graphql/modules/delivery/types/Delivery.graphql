@@ -1,4 +1,4 @@
-type Delivery implements node {
+type Delivery implements Node {
   id: ID!
   _id: String!
   recipient_id: String

@@ -1,4 +1,4 @@
-type DeliveryMan implements node {
+type DeliveryMan implements Node {
   id: ID!
   _id: String!
   name: String
