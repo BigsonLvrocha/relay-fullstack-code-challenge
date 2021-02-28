@@ -1,7 +1,6 @@
 import { Op } from 'sequelize';
+import Dataloader from 'dataloader';
 import { Models } from '../../db';
-
-import Dataloader = require('dataloader');
 
 export function getLoader(models: Models) {
   const userLoader = new Dataloader(async (ids: readonly string[]) => {
@@ -14,7 +13,7 @@ export function getLoader(models: Models) {
       raw: true,
     });
     return ids.map(
-      id => users.find(user => user.id === id) || new Error('not found'),
+      (id) => users.find((user) => user.id === id) || new Error('not found'),
     );
   });
   return userLoader;

@@ -1,12 +1,12 @@
 import { errorHandler } from 'graphql-api-koa';
-import { router } from './router';
+import Bodyparser from 'koa-bodyparser';
+import Koa from 'koa';
+import logger from 'koa-logger';
+import cors from '@koa/cors';
+
 import { errorMiddleware } from './middleware/errorMiddleware';
 import { authMiddleware } from './middleware/authMiddleware';
-
-import Bodyparser = require('koa-bodyparser');
-import Koa = require('koa');
-import logger = require('koa-logger');
-import cors = require('@koa/cors');
+import { router } from './router';
 
 const app = new Koa();
 

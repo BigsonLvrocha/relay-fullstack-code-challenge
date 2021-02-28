@@ -1,13 +1,16 @@
 import { promisify } from 'util';
 
-import { verify, GetPublicKeyOrSecret, Secret } from 'jsonwebtoken';
+import { verify, Secret, VerifyOptions } from 'jsonwebtoken';
 import { Middleware } from 'koa';
 
 import { models } from '../db';
 
-const verifyAsync = promisify<string, Secret | GetPublicKeyOrSecret, object>(
-  verify,
-);
+const verifyAsync = promisify<
+  string,
+  Secret,
+  VerifyOptions | undefined,
+  object | string
+>(verify);
 
 export const authMiddleware: Middleware = async (ctx, next) => {
   const auth =
@@ -22,6 +25,7 @@ export const authMiddleware: Middleware = async (ctx, next) => {
   const tokenData = (await verifyAsync(
     token,
     process.env.API_SECRET as string,
+    undefined,
   )) as { userId?: string };
   const { userId } = tokenData;
   if (!userId) {

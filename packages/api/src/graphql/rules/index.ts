@@ -1,8 +1,7 @@
 import { rule } from 'graphql-shield';
+import createError from 'http-errors';
 
 import { GraphQLContext } from '../context';
-
-import createError = require('http-errors');
 
 export const isAdmin = rule({ cache: 'contextual' })(
   (_parent, _arg, ctx: GraphQLContext) => {

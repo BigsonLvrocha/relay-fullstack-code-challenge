@@ -4,9 +4,8 @@ import { shield } from 'graphql-shield';
 import { fileLoader } from 'merge-graphql-schemas';
 import { defaultsDeep } from 'lodash';
 
+import createError from 'http-errors';
 import { isAdmin } from '../rules';
-
-import createError = require('http-errors');
 
 function getRuleTree() {
   const rules = fileLoader(

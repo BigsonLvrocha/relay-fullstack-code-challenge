@@ -26,7 +26,7 @@ const resolvers: GQLResolvers = {
       return response as any;
     },
   },
-  node: {
+  Node: {
     __resolveType: ({ __typename }: any) => __typename,
   },
 };

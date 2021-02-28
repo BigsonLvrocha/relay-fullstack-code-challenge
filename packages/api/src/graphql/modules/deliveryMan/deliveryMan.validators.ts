@@ -3,6 +3,7 @@ import { IMiddleware } from 'graphql-middleware';
 import { anyNonNil } from 'is-uuid';
 import { fromGlobalId } from 'graphql-relay';
 
+import createError from 'http-errors';
 import {
   GQLMutationCreateDeliveryManArgs,
   GQLMutationUpdateDeliveryManArgs,
@@ -12,8 +13,6 @@ import {
 } from '../../generated/schema';
 import { GraphQLContext } from '../../context';
 import { deliveries } from '../delivery/delivery.validators';
-
-import createError = require('http-errors');
 
 const createDeliveryMan: IMiddleware<
   {},
@@ -26,9 +25,7 @@ const createDeliveryMan: IMiddleware<
         clientMutationId: string(),
         values: object({
           name: string().required(),
-          email: string()
-            .email()
-            .required(),
+          email: string().email().required(),
           avatarId: string()
             .transform(function transformAvatarId(value) {
               if (!this.isType(value)) {

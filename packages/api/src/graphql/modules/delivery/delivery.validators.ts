@@ -6,7 +6,6 @@ import {
   date,
   mixed,
   object,
-  MixedSchema,
 } from 'yup';
 import { Op } from 'sequelize';
 import { IMiddleware } from 'graphql-middleware';
@@ -21,6 +20,7 @@ import {
   setMilliseconds,
 } from 'date-fns';
 
+import createError from 'http-errors';
 import { GraphQLContext } from '../../context';
 import {
   GQLMutationCreateDeliveryArgs,
@@ -30,9 +30,6 @@ import {
   GQLMutationPickupDeliveryArgs,
   GQLMutationCloseDeliveryArgs,
 } from '../../generated/schema';
-import { FileUploadPromise } from '../scalars/scalarHelper';
-
-import createError = require('http-errors');
 
 const createDelivery: IMiddleware<
   {},
@@ -56,7 +53,11 @@ const createDelivery: IMiddleware<
             const { type, id } = fromGlobalId(val);
             return type === 'Recipient' ? id : null;
           })
-          .test('valid uuid', 'should be a valid uui', anyNonNil)
+          .test(
+            'valid uuid',
+            'should be a valid uui',
+            (val) => !val || anyNonNil(val),
+          )
           .test(
             'valid recipient',
             'should be a valid recipient',
@@ -80,7 +81,11 @@ const createDelivery: IMiddleware<
             const { type, id } = fromGlobalId(val);
             return type === 'DeliveryMan' ? id : null;
           })
-          .test('valid uuid', 'should be a valid uui', anyNonNil)
+          .test(
+            'valid uuid',
+            'should be a valid uui',
+            (val) => !val || anyNonNil(val),
+          )
           .test(
             'valid delivery man',
             'should be a valid delivery man',
@@ -113,12 +118,8 @@ export const deliveries: IMiddleware<
 > = async (resolver, parent, args, ctx, info) => {
   try {
     const schema = object({
-      first: number()
-        .positive()
-        .nullable(),
-      last: number()
-        .positive()
-        .nullable(),
+      first: number().positive().nullable(),
+      last: number().positive().nullable(),
       after: string()
         .transform(function transformGlobalCursor(val) {
           if (!val) {
@@ -397,24 +398,26 @@ const pickupDelivery: IMiddleware<
             },
           )
           .required(),
-        start_date: date().test(
-          'valid time',
-          'must be between 8h00 and 18h00',
-          function testStartDate(val) {
-            if (!val) {
-              return true;
-            }
-            const start = setMilliseconds(
-              setSeconds(setMinutes(setHours(val, 8), 0), 0),
-              0,
-            );
-            const end = setMilliseconds(
-              setSeconds(setMinutes(setHours(val, 18), 0), 0),
-              0,
-            );
-            return isAfter(val, start) && isBefore(val, end);
-          },
-        ),
+        start_date: date()
+          .test(
+            'valid time',
+            'must be between 8h00 and 18h00',
+            function testStartDate(val) {
+              if (!val) {
+                return true;
+              }
+              const start = setMilliseconds(
+                setSeconds(setMinutes(setHours(val, 8), 0), 0),
+                0,
+              );
+              const end = setMilliseconds(
+                setSeconds(setMinutes(setHours(val, 18), 0), 0),
+                0,
+              );
+              return isAfter(val, start) && isBefore(val, end);
+            },
+          )
+          .required(),
       }).required(),
     });
     const result = await schema.validate(args);
@@ -475,7 +478,7 @@ const closeDelivery: IMiddleware<
           })
           .required(),
         end_date: date().required(),
-        signature: mixed() as MixedSchema<FileUploadPromise>,
+        signature: mixed(),
       }),
     });
     const result = await schema.validate(args);

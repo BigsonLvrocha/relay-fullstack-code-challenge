@@ -76,16 +76,9 @@ const createRecipient: IMiddleware<
       input: object({
         clientMutationId: string(),
         values: object().shape({
-          name: string()
-            .min(2)
-            .required(),
-          street: string()
-            .min(2)
-            .required(),
-          number: number()
-            .integer()
-            .positive()
-            .nullable(),
+          name: string().min(2).required(),
+          street: string().min(2).required(),
+          number: number().integer().positive().nullable(),
           complement: string().nullable(),
           state: string().required() as StringSchema<GQLBrState>,
           city: string().required(),
@@ -135,26 +128,29 @@ const updateRecipient: IMiddleware<
             }
             return id;
           })
-          .test('is-uuid', 'should be valid id', anyNonNil)
+          .test(
+            'is-uuid',
+            'should be valid id',
+            (val) => !val || anyNonNil(val),
+          )
           .required(),
         values: object().shape({
           name: string().min(2),
           street: string().min(2),
-          number: number()
-            .integer()
-            .positive()
-            .nullable(),
+          number: number().integer().positive().nullable(),
           complement: string().nullable(),
           state: string() as StringSchema<GQLBrState>,
           city: string(),
-          cep: string().test('cep text', 'cep must be valid', function testCep(
-            val,
-          ) {
-            if (!val) {
-              return true;
-            }
-            return cepTest.test(val);
-          }),
+          cep: string().test(
+            'cep text',
+            'cep must be valid',
+            function testCep(val) {
+              if (!val) {
+                return true;
+              }
+              return cepTest.test(val);
+            },
+          ),
         }),
       }),
     });
@@ -170,7 +166,7 @@ const updateRecipient: IMiddleware<
   }
 };
 
-export default {
+const resolvers = {
   Mutation: {
     updateRecipient,
     createRecipient,
@@ -179,3 +175,5 @@ export default {
     recipients,
   },
 };
+
+export default resolvers;
