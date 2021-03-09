@@ -13,8 +13,7 @@ const verifyAsync = promisify<
 >(verify);
 
 export const authMiddleware: Middleware = async (ctx, next) => {
-  const auth =
-    ctx.request.headers.authorization || ctx.request.headers.Authorization;
+  const auth = ctx.request.headers.authorization;
   if (!auth) {
     return next();
   }
