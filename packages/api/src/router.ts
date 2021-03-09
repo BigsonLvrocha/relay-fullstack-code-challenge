@@ -10,33 +10,30 @@ import Router from '@koa/router';
 import { schema } from './graphql';
 import { getContext } from './graphql/context';
 
-const router = new Router();
-
-router.get('/hello', (ctx) => {
-  ctx.body = 'hello visitor';
-});
-
-router.all('/playground', koaPlayground({ endpoint: '/graphql' }));
-
-router.get('/uploads/:file', (ctx) =>
-  send(ctx, ctx.params.file, {
-    root: resolve(__dirname, '..', 'tmp', 'uploads'),
-  }),
-);
-
-router.post(
-  '/graphql',
-  graphqlUploadKoa({
-    maxFiles: 10,
-    maxFileSize: 10000000,
-  }),
-  execute({
-    override: (ctx) =>
-      ({
-        schema,
-        contextValue: getContext((ctx as unknown) as ParameterizedContext),
-      } as any),
-  }),
-);
-
-export { router };
+export function createAppRouter(): Router {
+  const router = new Router()
+    .get('/hello', (ctx) => {
+      ctx.body = 'hello visitor';
+    })
+    .all('/playground', koaPlayground({ endpoint: '/graphql' }))
+    .get('/uploads/:file', (ctx) =>
+      send(ctx, ctx.params.file, {
+        root: resolve(__dirname, '..', 'tmp', 'uploads'),
+      }),
+    )
+    .post(
+      '/graphql',
+      graphqlUploadKoa({
+        maxFiles: 10,
+        maxFileSize: 10000000,
+      }),
+      execute({
+        override: (ctx) =>
+          ({
+            schema,
+            contextValue: getContext((ctx as unknown) as ParameterizedContext),
+          } as any),
+      }),
+    );
+  return router;
+}
