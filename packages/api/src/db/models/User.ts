@@ -13,7 +13,7 @@ export interface User extends Model {
 export type UserStatic = SequelizeStaticType<User>;
 
 export function build(sequelize: Sequelize) {
-  const User = sequelize.define(
+  const UserModel = sequelize.define(
     'user',
     {
       id: {
@@ -42,5 +42,5 @@ export function build(sequelize: Sequelize) {
       updatedAt: 'updated_at',
     },
   ) as UserStatic;
-  return User;
+  return UserModel;
 }
