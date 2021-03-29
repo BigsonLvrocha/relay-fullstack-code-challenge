@@ -1,7 +1,37 @@
 import { Model, Sequelize, DataTypes } from 'sequelize';
 
 import { SequelizeStaticType } from '..';
-import { GQLBrState } from '../../graphql/generated/schema';
+import { Unarray } from '../../utils/types';
+
+const statesEnum = [
+  'AC' as const,
+  'AL' as const,
+  'AP' as const,
+  'AM' as const,
+  'BA' as const,
+  'CE' as const,
+  'DF' as const,
+  'ES' as const,
+  'GO' as const,
+  'MA' as const,
+  'MT' as const,
+  'MS' as const,
+  'MG' as const,
+  'PA' as const,
+  'PB' as const,
+  'PR' as const,
+  'PE' as const,
+  'PI' as const,
+  'RJ' as const,
+  'RN' as const,
+  'RS' as const,
+  'RO' as const,
+  'RR' as const,
+  'SC' as const,
+  'SP' as const,
+  'SE' as const,
+  'TO' as const,
+];
 
 export interface Recipient extends Model {
   readonly id: string;
@@ -9,7 +39,7 @@ export interface Recipient extends Model {
   street: string;
   number: number | undefined | null;
   complement: string | undefined | null;
-  state: GQLBrState;
+  state: Unarray<typeof statesEnum>;
   city: string;
   cep: string;
   created_at: Date;
@@ -19,7 +49,7 @@ export interface Recipient extends Model {
 export type RecipientStatic = SequelizeStaticType<Recipient>;
 
 export function build(sequelize: Sequelize) {
-  const Recipient = sequelize.define(
+  const RecipientModel = sequelize.define(
     'recipient',
     {
       id: {
@@ -44,35 +74,7 @@ export function build(sequelize: Sequelize) {
         allowNull: true,
       },
       state: {
-        type: DataTypes.ENUM(
-          'AC',
-          'AL',
-          'AP',
-          'AM',
-          'BA',
-          'CE',
-          'DF',
-          'ES',
-          'GO',
-          'MA',
-          'MT',
-          'MS',
-          'MG',
-          'PA',
-          'PB',
-          'PR',
-          'PE',
-          'PI',
-          'RJ',
-          'RN',
-          'RS',
-          'RO',
-          'RR',
-          'SC',
-          'SP',
-          'SE',
-          'TO',
-        ),
+        type: DataTypes.ENUM(...statesEnum),
         allowNull: false,
       },
       city: {
@@ -90,5 +92,5 @@ export function build(sequelize: Sequelize) {
       updatedAt: 'updated_at',
     },
   ) as RecipientStatic;
-  return Recipient;
+  return RecipientModel;
 }
