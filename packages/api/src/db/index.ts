@@ -31,7 +31,7 @@ function buildModel(seq: Sequelize) {
     Delivery: Delivery.build(seq),
     DeliveryProblem: DeliveryProblem.build(seq),
   };
-  Object.keys(models).forEach(key => {
+  Object.keys(models).forEach((key) => {
     const modelKey = key as keyof typeof models;
     if (models[modelKey].associate) {
       models[modelKey].associate!(models);
@@ -54,15 +54,13 @@ type SequelizeInstanceType<TStatic> = TStatic extends typeof Model & {
   ? U
   : never;
 
-export type AvailableModelInstanceTypes = SequelizeInstanceType<
-  AvailableModels
->;
+export type AvailableModelInstanceTypes = SequelizeInstanceType<AvailableModels>;
 
 export type SequelizeStaticType<TInstance> = typeof Model & {
   new (values?: Partial<TInstance>, options?: BuildOptions): TInstance;
 } & {
   associate?: (
-    models: Record<
+    assocModels: Record<
       string,
       typeof Model & {
         new (values?: Partial<any>, options?: BuildOptions): any;
