@@ -1,12 +1,13 @@
 import http from 'http';
+import gql from 'graphql-tag';
 import req from 'supertest';
 import { createServer } from '../server';
 
-const query = `
+const query = gql`
   query HelloQuery {
     hello
   }
-`;
+`.loc!.source.body;
 
 const { app } = createServer();
 const server = http.createServer(app.callback());
