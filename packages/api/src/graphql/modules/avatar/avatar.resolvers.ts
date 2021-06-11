@@ -25,10 +25,7 @@ const resolvers: GQLResolvers = {
       const streamIn = fileData.createReadStream();
       const streamOut = createWriteStream(path);
       await new Promise((res, rej) => {
-        streamIn
-          .pipe(streamOut)
-          .on('finish', res)
-          .on('error', rej);
+        streamIn.pipe(streamOut).on('finish', res).on('error', rej);
       });
       const avatar = await ctx.models.Avatar.create({
         original_name: fileData.filename,
