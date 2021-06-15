@@ -11,6 +11,8 @@
   "devDependencies": {
     "@graphql-codegen/cli": "^1.21.5",
     "@jest/types": "^27.0.2",
+    "@types/jest": "^26.0.23",
+    "@types/node": "^15.12.2",
     "@typescript-eslint/eslint-plugin": "^4.26.1",
     "@typescript-eslint/parser": "^4.26.1",
     "create-react-app": "^4.0.3",

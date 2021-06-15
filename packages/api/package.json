@@ -1,7 +1,7 @@
 {
   "name": "@certification10/api",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "dist/index.js",
   "license": "MIT",
   "devDependencies": {
     "@graphql-codegen/schema-ast": "^1.18.3",
@@ -28,6 +28,7 @@
     "@types/uuid": "^8.3.0",
     "@types/validator": "^13.1.4",
     "@types/yup": "^0.29.11",
+    "concurrently": "^6.2.0",
     "faker": "^5.5.3",
     "graphql-tag": "^2.12.4",
     "nodemon": "^2.0.7",
@@ -36,9 +37,10 @@
     "typescript": "^4.3.2"
   },
   "scripts": {
-    "dev": "nodemon src/index.ts",
+    "dev": "yarn concurrently \"tsc -w\" \"yarn nodemon --es-module-specifier-resolution=node dist/index.js\" \" yarn nodemon --config graphql-nodemon.json scripts/copyGraphql.bash\"",
     "gen-schema-types": "graphql-codegen --config codegen.yml"
   },
+  "type": "module",
   "dependencies": {
     "@koa/cors": "^3.1.0",
     "@koa/router": "^10.0.0",
@@ -48,6 +50,7 @@
     "dataloader": "^2.0.0",
     "date-fns": "^2.22.1",
     "dotenv": "^10.0.0",
+    "esm": "^3.2.25",
     "graphql": "^15.5.0",
     "graphql-api-koa": "^7.0.0",
     "graphql-middleware": "^6.0.10",
