@@ -1,6 +1,8 @@
-import { Model, Sequelize, DataTypes } from 'sequelize';
+import Sequelize, { Model } from 'sequelize';
 
 import { SequelizeStaticType } from '..';
+
+const { DataTypes } = Sequelize;
 
 export interface Avatar extends Model {
   readonly id: string;
@@ -12,8 +14,8 @@ export interface Avatar extends Model {
 
 export type AvatarStatic = SequelizeStaticType<Avatar>;
 
-export function build(sequelize: Sequelize) {
-  const Avatar = sequelize.define(
+export function build(sequelize: Sequelize.Sequelize) {
+  const AvatarModel = sequelize.define(
     'avatar',
     {
       id: {
@@ -37,5 +39,5 @@ export function build(sequelize: Sequelize) {
       updatedAt: 'updated_at',
     },
   ) as AvatarStatic;
-  return Avatar;
+  return AvatarModel;
 }

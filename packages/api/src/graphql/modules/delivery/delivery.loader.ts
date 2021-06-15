@@ -1,8 +1,10 @@
-import { FindOptions, Op } from 'sequelize';
+import Sequelize, { FindOptions } from 'sequelize';
 import { toGlobalId, ConnectionArguments } from 'graphql-relay';
 
 import { GraphQLContext } from '../../context';
 import { Delivery } from '../../../db/models/Delivery';
+
+const { Op } = Sequelize;
 
 async function cursor2offset(
   ctx: GraphQLContext,
@@ -147,7 +149,7 @@ export async function loadAll(ctx: GraphQLContext, args: LoadAllDeliveryArgs) {
   const endEdge = edges[edges.length - 1];
   return {
     totalCount,
-    edges: edges.map(edge => ({
+    edges: edges.map((edge) => ({
       cursor: model2cursor(edge),
       node: edge,
     })),

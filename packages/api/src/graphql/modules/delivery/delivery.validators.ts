@@ -7,7 +7,7 @@ import {
   mixed,
   object,
 } from 'yup';
-import { Op } from 'sequelize';
+import Sequelize from 'sequelize';
 import { IMiddleware } from 'graphql-middleware';
 import { anyNonNil } from 'is-uuid';
 import { fromGlobalId } from 'graphql-relay';
@@ -30,6 +30,8 @@ import {
   GQLMutationPickupDeliveryArgs,
   GQLMutationCloseDeliveryArgs,
 } from '../../generated/schema';
+
+const { Op } = Sequelize;
 
 const createDelivery: IMiddleware<
   {},

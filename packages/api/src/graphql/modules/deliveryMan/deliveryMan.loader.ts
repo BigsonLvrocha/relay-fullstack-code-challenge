@@ -1,7 +1,9 @@
-import { Op, FindOptions } from 'sequelize';
+import Sequelize, { FindOptions } from 'sequelize';
 import { ConnectionArguments, toGlobalId } from 'graphql-relay';
 import { GraphQLContext } from '../../context';
 import { DeliveryMan } from '../../../db/models/DeliveryMan';
+
+const { Op } = Sequelize;
 
 export function model2cursor(model: DeliveryMan) {
   return toGlobalId('DeliveryManEdgeCursor', model.email);

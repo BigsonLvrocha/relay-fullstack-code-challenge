@@ -1,4 +1,4 @@
-import { Model, Sequelize, DataTypes } from 'sequelize';
+import Sequelize, { Model } from 'sequelize';
 
 import { SequelizeStaticType } from '..';
 
@@ -15,10 +15,12 @@ export interface Delivery extends Model {
   readonly updated_at: Date;
 }
 
+const { DataTypes } = Sequelize;
+
 export type DeliveryStatic = SequelizeStaticType<Delivery>;
 
-export function build(sequelize: Sequelize) {
-  const Delivery = sequelize.define(
+export function build(sequelize: Sequelize.Sequelize) {
+  const DeliveryModel = sequelize.define(
     'delivery',
     {
       id: {
@@ -80,7 +82,7 @@ export function build(sequelize: Sequelize) {
     },
   ) as DeliveryStatic;
 
-  Delivery.associate = models => {
+  DeliveryModel.associate = (models) => {
     models.Delivery.belongsTo(models.DeliveryMan, {
       foreignKey: 'delivery_man_id',
     });
@@ -95,5 +97,5 @@ export function build(sequelize: Sequelize) {
     });
   };
 
-  return Delivery;
+  return DeliveryModel;
 }

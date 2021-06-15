@@ -1,5 +1,7 @@
-import { Model, Sequelize, DataTypes } from 'sequelize';
+import Sequelize, { Model } from 'sequelize';
 import { SequelizeStaticType } from '..';
+
+const { DataTypes } = Sequelize;
 
 export interface User extends Model {
   readonly id: string;
@@ -12,7 +14,7 @@ export interface User extends Model {
 
 export type UserStatic = SequelizeStaticType<User>;
 
-export function build(sequelize: Sequelize) {
+export function build(sequelize: Sequelize.Sequelize) {
   const UserModel = sequelize.define(
     'user',
     {

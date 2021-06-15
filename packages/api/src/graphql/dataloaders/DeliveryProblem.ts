@@ -1,6 +1,8 @@
-import { Op } from 'sequelize';
+import Sequelize from 'sequelize';
 import Dataloader from 'dataloader';
 import { Models } from '../../db';
+
+const { Op } = Sequelize;
 
 export function getLoader(models: Models) {
   return new Dataloader(async (ids: readonly string[]) => {

@@ -1,4 +1,4 @@
-import { Sequelize, Model, BuildOptions } from 'sequelize';
+import Sequelize, { Model, BuildOptions } from 'sequelize';
 
 import * as config from './config';
 import * as User from './models/User';
@@ -20,9 +20,9 @@ if (!isNodeEnvValid(env)) {
 
 const seqConfig = config[env];
 
-export const sequelize = new Sequelize(seqConfig);
+export const sequelize = new Sequelize.Sequelize(seqConfig);
 
-function buildModel(seq: Sequelize) {
+function buildModel(seq: Sequelize.Sequelize) {
   const models = {
     User: User.build(seq),
     Recipient: Recipient.build(seq),
@@ -54,7 +54,8 @@ type SequelizeInstanceType<TStatic> = TStatic extends typeof Model & {
   ? U
   : never;
 
-export type AvailableModelInstanceTypes = SequelizeInstanceType<AvailableModels>;
+export type AvailableModelInstanceTypes =
+  SequelizeInstanceType<AvailableModels>;
 
 export type SequelizeStaticType<TInstance> = typeof Model & {
   new (values?: Partial<TInstance>, options?: BuildOptions): TInstance;

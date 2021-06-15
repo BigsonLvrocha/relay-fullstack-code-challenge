@@ -1,7 +1,9 @@
-import { Model, Sequelize, DataTypes } from 'sequelize';
+import Sequelize, { Model } from 'sequelize';
 
 import { SequelizeStaticType } from '..';
 import { Unarray } from '../../utils/types';
+
+const { DataTypes } = Sequelize;
 
 const statesEnum = [
   'AC' as const,
@@ -48,7 +50,7 @@ export interface Recipient extends Model {
 
 export type RecipientStatic = SequelizeStaticType<Recipient>;
 
-export function build(sequelize: Sequelize) {
+export function build(sequelize: Sequelize.Sequelize) {
   const RecipientModel = sequelize.define(
     'recipient',
     {

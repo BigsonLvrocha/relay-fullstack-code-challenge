@@ -1,4 +1,6 @@
-import { QueryInterface, DataTypes } from 'sequelize';
+import Sequelize, { QueryInterface } from 'sequelize';
+
+const { DataTypes } = Sequelize;
 
 export async function up(q: QueryInterface) {
   await q.createTable('users', {
