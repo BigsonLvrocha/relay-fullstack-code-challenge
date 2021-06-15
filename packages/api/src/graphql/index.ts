@@ -1,8 +1,13 @@
 import { join, dirname } from 'path';
 import { fileURLToPath, pathToFileURL } from 'url';
 
-import { fileLoader, mergeTypes, mergeResolvers } from 'merge-graphql-schemas';
-import { makeExecutableSchema } from 'graphql-tools';
+import {
+  makeExecutableSchema,
+  mergeResolvers,
+  mergeTypeDefs,
+  loadFilesSync,
+  loadFiles,
+} from 'graphql-tools';
 import { applyMiddleware } from 'graphql-middleware';
 
 import { middlewares } from './middleware';
@@ -10,21 +15,26 @@ import { middlewares } from './middleware';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-function getResolvers() {
-  const resolversArray = fileLoader(
+async function getResolvers() {
+  const resolversArray = await loadFiles(
     join(__dirname, 'modules/**/*.resolvers.*s'),
+    {
+      requireMethod: async (path: string) => {
+        return import(pathToFileURL(path).toString());
+      },
+    },
   );
   return mergeResolvers(resolversArray);
 }
 
 function getTypes() {
-  const typesArray = fileLoader(join(__dirname, 'modules/**/*.graphql'));
-  return mergeTypes(typesArray);
+  const typesArray = loadFilesSync(join(__dirname, 'modules/**/*.graphql'));
+  return mergeTypeDefs(typesArray);
 }
 
-function createSchema() {
+export async function createSchema() {
   const typeDefs = getTypes();
-  const resolvers = getResolvers();
+  const resolvers = await getResolvers();
   const executableSchema = makeExecutableSchema({
     typeDefs,
     resolvers,
@@ -32,4 +42,4 @@ function createSchema() {
   return applyMiddleware(executableSchema, ...middlewares);
 }
 
-export const schema = createSchema();
+export const schema = await createSchema();
