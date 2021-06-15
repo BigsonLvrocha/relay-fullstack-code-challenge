@@ -1,7 +1,7 @@
 import { promisify } from 'util';
 
 import { compare } from 'bcrypt';
-import { sign, Secret, SignOptions } from 'jsonwebtoken';
+import jwt, { Secret, SignOptions } from 'jsonwebtoken';
 
 import { GQLResolvers } from '../../generated/schema';
 
@@ -10,7 +10,7 @@ const signAsync = promisify<
   Secret,
   SignOptions,
   string
->(sign);
+>(jwt.sign);
 
 const resolvers: GQLResolvers = {
   Mutation: {

@@ -1,6 +1,6 @@
 import { promisify } from 'util';
 
-import { verify, Secret, VerifyOptions } from 'jsonwebtoken';
+import jwt, { Secret, VerifyOptions } from 'jsonwebtoken';
 import { Middleware } from 'koa';
 
 import { models } from '../db';
@@ -10,7 +10,7 @@ const verifyAsync = promisify<
   Secret,
   VerifyOptions | undefined,
   object | string
->(verify);
+>(jwt.verify);
 
 export const authMiddleware: Middleware = async (ctx, next) => {
   const auth = ctx.request.headers.authorization;
