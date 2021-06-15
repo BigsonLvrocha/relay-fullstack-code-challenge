@@ -1,5 +1,5 @@
 import { promisify } from 'util';
-import { sign, Secret, SignOptions } from 'jsonwebtoken';
+import jwt, { Secret, SignOptions } from 'jsonwebtoken';
 import { v4 as uuid } from 'uuid';
 import http from 'http';
 import gql from 'graphql-tag';
@@ -26,7 +26,7 @@ const signAsync = promisify<
   Secret,
   SignOptions,
   string
->(sign);
+>(jwt.sign);
 
 it('greets the graphql schema', async () => {
   const user = await models.User.create({
