@@ -1,6 +1,6 @@
 {
-  "execMap": {
-    "ts": "ts-node"
-  },
+  "watch": [
+    "dist/"
+  ],
   "ext": "js,json,graphql,ts"
 }
