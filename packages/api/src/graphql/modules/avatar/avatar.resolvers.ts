@@ -1,10 +1,14 @@
-import { resolve } from 'path';
+import { resolve, dirname } from 'path';
 import { createWriteStream } from 'fs';
+import { fileURLToPath } from 'url';
 
 import { v4 } from 'uuid';
 
 import { toGlobalId } from 'graphql-relay';
 import { GQLResolvers } from '../../generated/schema';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const resolvers: GQLResolvers = {
   Mutation: {

@@ -1,10 +1,14 @@
-import { join } from 'path';
+import { join, dirname } from 'path';
+import { fileURLToPath, pathToFileURL } from 'url';
 
 import { fileLoader, mergeTypes, mergeResolvers } from 'merge-graphql-schemas';
 import { makeExecutableSchema } from 'graphql-tools';
 import { applyMiddleware } from 'graphql-middleware';
 
 import { middlewares } from './middleware';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 function getResolvers() {
   const resolversArray = fileLoader(

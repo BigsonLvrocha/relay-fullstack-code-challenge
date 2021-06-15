@@ -1,4 +1,5 @@
-import { resolve } from 'path';
+import { resolve, dirname } from 'path';
+import { fileURLToPath } from 'url';
 
 import { execute } from 'graphql-api-koa';
 import { graphqlUploadKoa } from 'graphql-upload';
@@ -10,12 +11,18 @@ import Router from '@koa/router';
 import { schema } from './graphql';
 import { getContext } from './graphql/context';
 
-export function createAppRouter(): Router {
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+export function createAppRouter(): Promise<Router> {
   const router = new Router()
     .get('/hello', (ctx) => {
       ctx.body = 'hello visitor';
     })
-    .all('/playground', koaPlayground({ endpoint: '/graphql' }))
+    .all(
+      '/playground',
+      (koaPlayground as any).default({ endpoint: '/graphql' }),
+    )
     .get('/uploads/:file', (ctx) =>
       send(ctx, ctx.params.file, {
         root: resolve(__dirname, '..', 'tmp', 'uploads'),

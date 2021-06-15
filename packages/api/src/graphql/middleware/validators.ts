@@ -1,7 +1,9 @@
-import { join } from 'path';
+import { pathToFileURL, fileURLToPath } from 'url';
+import { join, dirname } from 'path';
 
-import { defaultsDeep } from 'lodash';
-import { fileLoader } from 'merge-graphql-schemas';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 
 function getValidators() {
   const validators = fileLoader(

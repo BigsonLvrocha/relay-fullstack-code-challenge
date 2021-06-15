@@ -1,13 +1,17 @@
 import { toGlobalId } from 'graphql-relay';
-import { resolve } from 'path';
+import { resolve, dirname } from 'path';
 import { createWriteStream } from 'fs';
 import { v4 } from 'uuid';
+import { fileURLToPath } from 'url';
 
 import { GQLResolvers } from '../../generated/schema';
 import { idResolver } from '../helper/relayResolver';
 import { Delivery } from '../../../db/models/Delivery';
 
 import { model2cursor, loadAll } from './delivery.loader';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const resolvers: GQLResolvers = {
   Delivery: {
@@ -127,12 +131,9 @@ const resolvers: GQLResolvers = {
       const streamIn = fileData.createReadStream();
       const streamOut = createWriteStream(path);
       await new Promise((res, rej) => {
-        streamIn
-          .pipe(streamOut)
-          .on('finish', res)
-          .on('error', rej);
+        streamIn.pipe(streamOut).on('finish', res).on('error', rej);
       });
-      await ctx.sequelize.transaction(async t => {
+      await ctx.sequelize.transaction(async (t) => {
         const avatar = await ctx.models.Avatar.create(
           {
             original_name: fileData.filename,
