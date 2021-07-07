@@ -2,5 +2,6 @@
   "watch": [
     "dist/"
   ],
+  "delay": "500",
   "ext": "js,json,graphql,ts"
 }
