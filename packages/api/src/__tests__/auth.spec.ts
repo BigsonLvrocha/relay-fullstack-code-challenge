@@ -1,10 +1,12 @@
 import { promisify } from 'util';
+import http from 'http';
+
 import jwt, { Secret, SignOptions } from 'jsonwebtoken';
 import { v4 as uuid } from 'uuid';
-import http from 'http';
 import gql from 'graphql-tag';
 import req from 'supertest';
 import faker from 'faker';
+
 import { createServer } from '../server';
 import { models, sequelize } from '../db';
 

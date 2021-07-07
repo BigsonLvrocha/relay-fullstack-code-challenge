@@ -1,5 +1,7 @@
 import { toGlobalId } from 'graphql-relay';
+
 import { GQLResolvers } from '../../generated/schema';
+
 import { loadAll } from './recipient.loader';
 
 const resolvers: GQLResolvers = {

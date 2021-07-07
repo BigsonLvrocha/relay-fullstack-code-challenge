@@ -2,6 +2,7 @@ import { object, string, number, StringSchema, ValidationError } from 'yup';
 import { IMiddleware } from 'graphql-middleware';
 import { fromGlobalId } from 'graphql-relay';
 import { anyNonNil } from 'is-uuid';
+
 import {
   GQLMutationCreateRecipientArgs,
   GQLMutationUpdateRecipientArgs,
@@ -12,59 +13,56 @@ import { GraphQLContext } from '../../context';
 
 const cepTest = /^[0-9]{8}$/;
 
-const recipients: IMiddleware<
-  {},
-  GraphQLContext,
-  GQLQueryRecipientsArgs
-> = async (resolver, parent, args, ctx, info) => {
-  try {
-    const schema = object({
-      first: number().positive(),
-      last: number().positive(),
-      after: string().transform(function transformGlobalCursor(val) {
-        if (!this.isType(val)) {
-          return val;
-        }
-        const { type, id } = fromGlobalId(val);
-        return type === 'RecipientEdgeCursor'
-          ? id
-          : { invalidCursorType: type, expected: 'RecipientEdgeCursor' };
-      }),
-      before: string().transform(function transformGlobalCursor(val) {
-        if (!this.isType(val)) {
-          return val;
-        }
-        const { type, id } = fromGlobalId(val);
-        return type === 'RecipientEdgeCursor'
-          ? id
-          : { invalidCursorType: type, expected: 'RecipientEdgeCursor' };
-      }),
-      filter: object({
-        query: string(),
-      }),
-    }).test(
-      'valid connection args test',
-      'invalid connection args',
-      function testConnectionArgs(val) {
-        return !(
-          (val.first && val.last) ||
-          (val.first && val.before) ||
-          (val.last && val.after) ||
-          (val.after && val.before)
-        );
-      },
-    );
-    const result = await schema.validate(args);
-    return resolver(parent, result, ctx, info);
-  } catch (error) {
-    if (error instanceof ValidationError) {
-      return {
-        Error: error.errors,
-      };
+const recipients: IMiddleware<{}, GraphQLContext, GQLQueryRecipientsArgs> =
+  async (resolver, parent, args, ctx, info) => {
+    try {
+      const schema = object({
+        first: number().positive(),
+        last: number().positive(),
+        after: string().transform(function transformGlobalCursor(val) {
+          if (!this.isType(val)) {
+            return val;
+          }
+          const { type, id } = fromGlobalId(val);
+          return type === 'RecipientEdgeCursor'
+            ? id
+            : { invalidCursorType: type, expected: 'RecipientEdgeCursor' };
+        }),
+        before: string().transform(function transformGlobalCursor(val) {
+          if (!this.isType(val)) {
+            return val;
+          }
+          const { type, id } = fromGlobalId(val);
+          return type === 'RecipientEdgeCursor'
+            ? id
+            : { invalidCursorType: type, expected: 'RecipientEdgeCursor' };
+        }),
+        filter: object({
+          query: string(),
+        }),
+      }).test(
+        'valid connection args test',
+        'invalid connection args',
+        function testConnectionArgs(val) {
+          return !(
+            (val.first && val.last) ||
+            (val.first && val.before) ||
+            (val.last && val.after) ||
+            (val.after && val.before)
+          );
+        },
+      );
+      const result = await schema.validate(args);
+      return resolver(parent, result, ctx, info);
+    } catch (error) {
+      if (error instanceof ValidationError) {
+        return {
+          Error: error.errors,
+        };
+      }
+      throw error;
     }
-    throw error;
-  }
-};
+  };
 
 const createRecipient: IMiddleware<
   {},
