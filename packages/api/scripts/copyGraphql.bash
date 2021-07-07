@@ -1,5 +1,11 @@
 #!/bin/bash
 
+OLD_FILES=$(find dist/graphql -regextype posix-extended -regex "dist\/graphql\/.*\.graphql")
+
+for FILE in $OLD_FILES; do
+  rm $FILE;
+done
+
 FILES=$(find src/graphql -regextype posix-extended -regex "src\/graphql\/.*\.graphql")
 
 for FILE in $FILES; do
