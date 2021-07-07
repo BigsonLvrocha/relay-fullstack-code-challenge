@@ -58,6 +58,7 @@ module.exports = {
     'react-hooks/exhaustive-deps': 'warn',
     'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx', 'tsx'] }],
     'react/prop-types': 'off',
+    'import/order': ['error', { 'newlines-between': 'always' }],
     'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
     'import/no-unresolved': [
       'error',
