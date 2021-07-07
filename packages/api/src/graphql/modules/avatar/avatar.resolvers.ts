@@ -1,10 +1,9 @@
 import { resolve, dirname } from 'path';
-import { createWriteStream } from 'fs';
 import { fileURLToPath } from 'url';
 
 import { v4 } from 'uuid';
-
 import { toGlobalId } from 'graphql-relay';
+
 import { GQLResolvers } from '../../generated/schema';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -27,7 +26,7 @@ const resolvers: GQLResolvers = {
         filename,
       );
       const streamIn = fileData.createReadStream();
-      const streamOut = createWriteStream(path);
+      const streamOut = ctx.fs.createWriteStream(path);
       await new Promise((res, rej) => {
         streamIn.pipe(streamOut).on('finish', res).on('error', rej);
       });
