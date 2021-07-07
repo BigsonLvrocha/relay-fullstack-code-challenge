@@ -1,14 +1,17 @@
 import { execute } from 'graphql';
-import gql from 'graphql-tag';
 import { hashSync } from 'bcrypt';
+import { jest } from '@jest/globals';
 import faker from 'faker';
-import fs from 'fs';
-
+import gql from 'graphql-tag';
 import { toGlobalId } from 'graphql-relay';
+
 import { models, sequelize } from '../../../../db';
 import { User } from '../../../../db/models/User';
-import { getContext, GraphQLContext } from '../../../context';
-import { schema } from '../../..';
+import {
+  createTestSchema,
+  getTestContext,
+  GraphQLTestContext,
+} from '../../../../__tests__/fixtures';
 
 const uploadAvatarMutation = gql`
   mutation UploadAvatarMutation($input: UploadAvatarInput!) {
@@ -26,31 +29,18 @@ const uploadAvatarMutation = gql`
   }
 `;
 
-const spy = jest.spyOn(fs, 'createWriteStream').mockImplementation(
-  () =>
-    ({
-      pipe: jest.fn(function pipeMock(this: jest.Mock) {
-        return this;
-      }),
-      on(event: string, fn: () => {}) {
-        if (event === 'finish') {
-          fn();
-        }
-        return this;
-      },
-    } as any),
-);
+const schema = createTestSchema();
 
 let user: User;
-let contextValue: GraphQLContext;
+let contextValue: GraphQLTestContext;
 
 beforeAll(async () => {
   user = await models.User.create({
     name: faker.name.firstName(),
-    email: `e${faker.random.uuid()}@team.com.br`,
+    email: `e${faker.datatype.uuid()}@team.com.br`,
     password_hash: hashSync('1234', 10),
   });
-  contextValue = getContext({ state: { user } } as any);
+  contextValue = getTestContext({ state: { user } } as any);
 });
 
 afterAll(async () => {
@@ -59,8 +49,8 @@ afterAll(async () => {
 });
 
 it('creates a new avatar', async () => {
-  const original_name = `${faker.random.uuid()}.png`;
-  const clientMutationId = faker.random.uuid();
+  const original_name = `${faker.datatype.uuid()}.png`;
+  const clientMutationId = faker.datatype.uuid();
   const fileData = {
     createReadStream: jest.fn(() => ({
       pipe: jest.fn(function pipeMock(this: jest.Mock) {
@@ -88,7 +78,7 @@ it('creates a new avatar', async () => {
     document: uploadAvatarMutation,
   });
   expect(response.errors).toBeUndefined();
-  expect(spy).toHaveBeenCalled();
+  expect(contextValue.fs.createWriteStream).toHaveBeenCalled();
   const avatar = await models.Avatar.findOne({
     where: {
       original_name,

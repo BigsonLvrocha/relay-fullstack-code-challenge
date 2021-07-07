@@ -4,9 +4,12 @@ import { hashSync } from 'bcrypt';
 import faker from 'faker';
 
 import { models, sequelize } from '../../../../db';
-import { getContext } from '../../../context';
-import { schema } from '../../..';
+import {
+  createTestSchema,
+  getTestContext,
+} from '../../../../__tests__/fixtures';
 
+const schema = createTestSchema();
 const loginMutation = gql`
   mutation LoginMutation($input: LoginInput!) {
     login(input: $input) {
@@ -23,13 +26,13 @@ afterAll(async () => {
 
 it('logs in user', async () => {
   const password = faker.random.alphaNumeric();
-  const clientMutationId = faker.random.uuid();
+  const clientMutationId = faker.datatype.uuid();
   const user = await models.User.create({
     name: faker.name.firstName(),
-    email: `e${faker.random.uuid()}@team.com.br`,
+    email: `e${faker.datatype.uuid()}@team.com.br`,
     password_hash: hashSync(password, 10),
   });
-  const context = getContext({ state: {} } as any);
+  const context = getTestContext();
   const variables = {
     input: {
       clientMutationId,
@@ -51,13 +54,13 @@ it('logs in user', async () => {
 
 it('doest not log in user with wrong password', async () => {
   const password = faker.random.alphaNumeric();
-  const clientMutationId = faker.random.uuid();
+  const clientMutationId = faker.datatype.uuid();
   const user = await models.User.create({
     name: faker.name.firstName(),
-    email: `e${faker.random.uuid()}@team.com.br`,
+    email: `e${faker.datatype.uuid()}@team.com.br`,
     password_hash: hashSync(password, 10),
   });
-  const context = getContext({ state: {} } as any);
+  const context = getTestContext();
   const variables = {
     input: {
       clientMutationId,
@@ -80,13 +83,13 @@ it('doest not log in user with wrong password', async () => {
 
 it('does not log in non existent user', async () => {
   const password = faker.random.alphaNumeric();
-  const clientMutationId = faker.random.uuid();
+  const clientMutationId = faker.datatype.uuid();
   const user = await models.User.create({
     name: faker.name.firstName(),
-    email: `e${faker.random.uuid()}@team.com.br`,
+    email: `e${faker.datatype.uuid()}@team.com.br`,
     password_hash: hashSync(password, 10),
   });
-  const context = getContext({ state: {} } as any);
+  const context = getTestContext();
   const variables = {
     input: {
       clientMutationId,

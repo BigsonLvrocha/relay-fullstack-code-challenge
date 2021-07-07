@@ -2,12 +2,15 @@ import { execute } from 'graphql';
 import gql from 'graphql-tag';
 import { hashSync } from 'bcrypt';
 import faker from 'faker';
-
 import { toGlobalId } from 'graphql-relay';
+
 import { models, sequelize } from '../../../../db';
 import { User } from '../../../../db/models/User';
-import { getContext, GraphQLContext } from '../../../context';
-import { schema } from '../../..';
+import {
+  createTestSchema,
+  getTestContext,
+  GraphQLTestContext,
+} from '../../../../__tests__/fixtures';
 
 const avatarQuery = gql`
   query AvatarQuery($id: ID!) {
@@ -26,15 +29,20 @@ const avatarQuery = gql`
 `;
 
 let user: User;
-let contextValue: GraphQLContext;
+let contextValue: GraphQLTestContext;
+const schema = createTestSchema();
 
 beforeAll(async () => {
   user = await models.User.create({
     name: faker.name.firstName(),
-    email: `e${faker.random.uuid()}@team.com.br`,
+    email: `e${faker.datatype.uuid()}@team.com.br`,
     password_hash: hashSync('1234', 10),
   });
-  contextValue = getContext({ state: { user } } as any);
+  contextValue = getTestContext(user);
+});
+
+beforeEach(() => {
+  contextValue.fs.createWriteStream.mockClear();
 });
 
 afterAll(async () => {
