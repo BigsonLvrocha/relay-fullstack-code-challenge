@@ -1,7 +1,10 @@
 {
-  "extends": "./tsconfig.json",
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "dist"
+    "outDir": "distcjs",
+    "module": "CommonJS",
+    "target": "ES3",
+    "incremental": false,
   },
   "include": ["src/db/**/*.ts"],
 }
