@@ -33,13 +33,15 @@
     "faker": "^5.5.3",
     "graphql-tag": "^2.12.4",
     "nodemon": "^2.0.7",
+    "renamer": "^3.2.1",
     "sequelize-cli": "^6.2.0",
     "supertest": "^6.1.3",
     "typescript": "^4.3.2"
   },
   "scripts": {
-    "dev": "yarn concurrently \"tsc -w\" \"yarn nodemon --es-module-specifier-resolution=node dist/index.js\" \" yarn nodemon --config graphql-nodemon.json scripts/copyGraphql.bash\"",
-    "gen-schema-types": "graphql-codegen --config codegen.yml"
+    "dev": "yarn concurrently \"tsc -w\" \"NODE_ENV=development yarn nodemon --es-module-specifier-resolution=node dist/index.js\" \"yarn nodemon --config graphql-nodemon.json scripts/copyGraphql.bash\"",
+    "gen-schema-types": "graphql-codegen --config codegen.yml",
+    "build-db": "yarn tsc --build tsconfig.db.json && yarn renamer --force -s -e ext --find js --replace cjs './distcjs/**/*.js'"
   },
   "type": "module",
   "dependencies": {
