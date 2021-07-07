@@ -7,14 +7,21 @@ import koaPlayground from 'graphql-playground-middleware-koa';
 import send from 'koa-send';
 import { ParameterizedContext } from 'koa';
 import Router from '@koa/router';
+import { GraphQLSchema } from 'graphql';
 
-import { schema } from './graphql';
+import { createSchema } from './graphql';
 import { getContext } from './graphql/context';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-export function createAppRouter(): Promise<Router> {
+type CreateAppRouterOptions = {
+  schema?: GraphQLSchema;
+};
+
+export function createAppRouter({
+  schema = createSchema(),
+}: CreateAppRouterOptions = {}): Router {
   const router = new Router()
     .get('/hello', (ctx) => {
       ctx.body = 'hello visitor';
@@ -38,7 +45,7 @@ export function createAppRouter(): Promise<Router> {
         override: (ctx) =>
           ({
             schema,
-            contextValue: getContext((ctx as unknown) as ParameterizedContext),
+            contextValue: getContext(ctx as unknown as ParameterizedContext),
           } as any),
       }),
     );
