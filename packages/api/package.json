@@ -7,6 +7,7 @@
     "@graphql-codegen/schema-ast": "^1.18.3",
     "@graphql-codegen/typescript": "1.22.1",
     "@graphql-codegen/typescript-resolvers": "1.19.2",
+    "@jest/globals": "^27.0.5",
     "@types/bcrypt": "^5.0.0",
     "@types/bluebird": "^3.5.35",
     "@types/faker": "^5.5.6",
