@@ -7,5 +7,7 @@ generated
 tmp
 enunciados
 __generated__
-.yarn/
+.yarn/**
 distcjs
+!.yarn/releases
+!.yarn/releases/yarn-berry.js
